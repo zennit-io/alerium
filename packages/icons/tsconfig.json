@@ -1,0 +1,4 @@
+{
+  "extends": ["@zenncore/config/typescript/ui"],
+  "include": ["src"]
+}

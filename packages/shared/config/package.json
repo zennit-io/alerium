@@ -1,0 +1,26 @@
+{
+  "name": "@zenncore/config",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./typescript": "./src/typescript/tsconfig.base.json",
+    "./typescript/web": "./src/typescript/tsconfig.web.json",
+    "./typescript/ui": "./src/typescript/tsconfig.ui.json",
+    "./typescript/native": "./src/typescript/tsconfig.native.json",
+    "./tailwind": "./src/tailwind/tailwind.config.ts",
+    "./tailwind/native": "./src/tailwind/tailwind.native.config.ts",
+    "./tailwind/web": "./src/tailwind/tailwind.web.config.ts",
+    "./tailwind/postcss": "./src/tailwind/postcss.config.js",
+    "./tailwind/globals": "./src/tailwind/globals.css",
+    "./native": {
+      "require": "./src/native/index.cjs"
+    }
+  },
+  "scripts": {
+    "lint": "biome check --fix --unsafe ."
+  },
+  "devDependencies": {
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__traverse": "^7.20.6"
+  }
+}

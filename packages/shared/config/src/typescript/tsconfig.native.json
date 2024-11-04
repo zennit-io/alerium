@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "module": "Preserve",
+    "strictNullChecks": true,
+    "strict": true
+  }
+}

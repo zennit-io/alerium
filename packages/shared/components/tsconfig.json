@@ -1,0 +1,7 @@
+{
+  "extends": ["@zenncore/config/typescript/ui"],
+  "include": [
+    "src",
+    "../types/src/domain/object-with-possible-optional-keys.ts"
+  ]
+}

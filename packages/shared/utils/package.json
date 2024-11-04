@@ -1,0 +1,16 @@
+{
+  "name": "@zenncore/utils",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./src/domain/index.ts",
+    "./components": "./src/components/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./navigation": "./src/navigation/index.ts",
+    "./native": "./src/native/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "biome check --fix --unsafe ."
+  }
+}

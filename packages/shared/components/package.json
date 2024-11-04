@@ -1,0 +1,13 @@
+{
+  "name": "@zenncore/components",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./data-table": "./src/data-table/index.ts",
+    "./form": "./src/form/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "biome check --fix --unsafe ."
+  }
+}

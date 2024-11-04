@@ -1,0 +1,4 @@
+{
+  "extends": ["expo/tsconfig.base", "@zenncore/config/typescript/native"],
+  "include": ["nativewind-env.d.ts", "*.ts", "src"]
+}

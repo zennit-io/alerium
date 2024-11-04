@@ -1,0 +1,40 @@
+{
+  "name": "@zennui/native",
+  "private": true,
+  "version": "0.0.0",
+  "exports": {
+    "./*": "./src/*.tsx",
+    "./form": "./src/form/index.ts",
+    "./calendar": "./src/calendar/index.ts",
+    "./drawer": "./src/drawer/index.ts",
+    "./carousel": "./src/carousel/index.ts",
+    "./utils": "./src/_utils/index.ts"
+  },
+  "main": "./src/index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "lint": "biome check --fix --unsafe ."
+  },
+  "dependencies": {
+    "@radix-ui/react-progress": "^1.0.3",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@rn-primitives/avatar": "~1.0.3",
+    "@rn-primitives/checkbox": "^1.0.3",
+    "@rn-primitives/label": "^1.0.3",
+    "@rn-primitives/navigation-menu": "^1.0.3",
+    "@rn-primitives/portal": "~1.0.3",
+    "@rn-primitives/progress": "~1.0.3",
+    "@rn-primitives/radio-group": "^1.0.3",
+    "@rn-primitives/select": "~1.0.3",
+    "@rn-primitives/slider": "^1.0.3",
+    "@rn-primitives/slot": "~1.0.3",
+    "@rn-primitives/switch": "^1.0.3",
+    "@rn-primitives/tabs": "^1.0.3",
+    "@rn-primitives/tooltip": "~1.0.3",
+    "@rn-primitives/types": "~1.0.3",
+    "@zennui/icons": "*",
+    "zustand": "^4.4.7",
+    "expo-clipboard": "4.8.0"
+  }
+}
