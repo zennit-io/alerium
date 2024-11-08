@@ -1,15 +1,10 @@
 import { Header } from "@/components/general/header";
-import { ScanIcon, View3DIcon } from "@zennui/icons";
 import { Button } from "@zennui/native/button";
-import { Drawer, DrawerContent } from "@zennui/native/drawer";
-import { FormSubmitButton, InferredForm, field } from "@zennui/native/form";
+import { field } from "@zennui/native/form";
 import { Text } from "@zennui/native/text";
-import { H1 } from "@zennui/native/typography";
+import { Link } from "expo-router";
 import { View } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { z } from "zod";
 
 const config = {
@@ -41,12 +36,14 @@ export default () => {
           paddingTop: top + 60,
         }}
       >
-        <Button
-          color={"primary"}
-          className="absolute self-center bottom-6 w-full"
-        >
-          <Text>Continue</Text>
-        </Button>
+        <Link href={"/scanned-info"} asChild>
+          <Button
+            color={"primary"}
+            className="absolute self-center bottom-6 w-full"
+          >
+            <Text>Continue</Text>
+          </Button>
+        </Link>
       </View>
     </>
   );
