@@ -6,6 +6,7 @@ module.exports = (api) => {
       "nativewind/babel",
     ],
     plugins: [
+      ["react-native-worklets-core/plugin"],
       [
         "module-resolver",
         {
@@ -27,6 +28,7 @@ module.exports = (api) => {
           },
         },
       ],
+      "react-native-reanimated/plugin",
     ],
   };
 };

@@ -3,10 +3,16 @@ import {
   CarouselContent,
   CarouselIndicator,
   CarouselItem,
+  type CarouselItemAnimateFn,
 } from "@zennui/native/carousel";
-import { Image, type ImageSource } from "expo-image";
 import { cssInterop } from "nativewind";
-import { View } from "react-native";
+import {
+  useWindowDimensions,
+  View,
+  Image,
+  type ImageSourcePropType,
+} from "react-native";
+import { Extrapolation, interpolate } from "react-native-reanimated";
 
 cssInterop(Image, { className: "style" });
 
@@ -27,7 +33,7 @@ const ROOMS = [
 
 export const RoomCarousel = () => {
   return (
-    <View className={"w-full h-60 gap-2"}>
+    <View className={"w-full h-96 gap-2 items-center"}>
       <Carousel itemCount={ROOMS.length}>
         <CarouselContent align={"center"}>
           {ROOMS.map((room, index) => (
@@ -35,7 +41,7 @@ export const RoomCarousel = () => {
             <RoomCarouselItem key={index} index={index} {...room} />
           ))}
         </CarouselContent>
-        <CarouselIndicator growthIndex={5} />
+        <CarouselIndicator growthIndex={3} className={"-translate-y-12"} />
       </Carousel>
     </View>
   );
@@ -43,13 +49,43 @@ export const RoomCarousel = () => {
 
 type RoomCarouselItemProps = {
   index: number;
-  image: ImageSource;
+  image: ImageSourcePropType;
   name: string;
 };
 const RoomCarouselItem = ({ index, image, name }: RoomCarouselItemProps) => {
+  const { width } = useWindowDimensions();
   return (
-    <CarouselItem index={index} className="self-strech relative p-2">
-      <Image source={image} className={"size-full rounded-2xl"} />
+    <CarouselItem
+      index={index}
+      className="p-2"
+      style={{
+        width: (4 / 5) * width,
+      }}
+      animate={animate}
+    >
+      <Image source={image} className={"w-full h-64 rounded-2xl"} />
     </CarouselItem>
   );
+};
+const animate: CarouselItemAnimateFn = (scrollOffset, index, itemSize) => {
+  "worklet";
+  const input = scrollOffset / itemSize;
+  const range = [index - 1, index, index + 1];
+
+  const scale = interpolate(
+    input,
+    range,
+    [0.95, 1.1, 0.95],
+    Extrapolation.CLAMP,
+  );
+  const translateY = interpolate(
+    input,
+    range,
+    [0, -30, 0],
+    Extrapolation.CLAMP,
+  );
+
+  return {
+    transform: [{ scale }, { translateY }],
+  };
 };

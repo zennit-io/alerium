@@ -1,17 +1,11 @@
 import { useControllableState } from "@zenncore/hooks";
-import {
-  type RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type RefObject, useEffect, useState } from "react";
 import { Dimensions, type LayoutChangeEvent } from "react-native";
 import type Animated from "react-native-reanimated";
 import {
   type ScrollHandlerProcessed,
   type SharedValue,
-  runOnJS,
+  useAnimatedRef,
   useAnimatedScrollHandler,
   useSharedValue,
 } from "react-native-reanimated";
@@ -49,15 +43,21 @@ export const useCarousel = ({
   direction = "horizontal",
   gap = 4,
 }: UseCarouselParams): UseCarouselReturn => {
+  const [size, setSize] = useState(Dimensions.get("screen").width);
+  const [itemSize, setItemSize] = useState(0);
   const [activeItem = 0, setActiveItem] = useControllableState({
     prop: activeItemProp,
     defaultProp: defaultActiveItem,
     onChange: (value) => {
+      const scrollOffset = itemSize * value + gap * value;
+
+      ref.current?.scrollTo({
+        [direction === "horizontal" ? "x" : "y"]: scrollOffset,
+        animated: true,
+      });
       onActiveItemChange?.(value);
     },
   });
-  const [size, setSize] = useState(Dimensions.get("screen").width);
-  const [itemSize, setItemSize] = useState(0);
   const scrollOffset = useSharedValue(0);
   const handleScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -71,7 +71,7 @@ export const useCarousel = ({
       // runOnJS(setActiveItem)(input > 0 ? Math.round(input) : 0);
     },
   });
-  const ref = useRef<Animated.ScrollView>(null);
+  const ref = useAnimatedRef<Animated.ScrollView>();
 
   const getCanScrollPrevious = () => activeItem > 0;
 
@@ -85,11 +85,6 @@ export const useCarousel = ({
       const updatedActiveItem =
         previousActiveItem > 0 ? previousActiveItem - 1 : previousActiveItem;
 
-      // ref.current?.scrollTo({
-      //   [direction === "horizontal" ? "x" : "y"]: itemSize * activeItem,
-      //   animated: true,
-      // });
-
       return updatedActiveItem;
     });
   };
@@ -98,16 +93,13 @@ export const useCarousel = ({
     setActiveItem((previousActiveItem = 0) => {
       const updatedActiveItem = previousActiveItem + 1;
 
-      // ref.current?.scrollTo({
-      //   [direction === "horizontal" ? "x" : "y"]: itemSize * activeItem,
-      //   animated: true,
-      // });
-
       return updatedActiveItem;
     });
   };
 
-  const scrollTo = (index: number) => setActiveItem(index);
+  const scrollTo = (index: number) => {
+    setActiveItem(index);
+  };
 
   const handleLayout = ({ nativeEvent }: LayoutChangeEvent) => {
     const carouselSize =
@@ -118,17 +110,10 @@ export const useCarousel = ({
   };
 
   const handleItemLayout = ({ nativeEvent }: LayoutChangeEvent) => {
-    const itemSize = nativeEvent.layout.width;
+    const itemSize =
+      nativeEvent.layout[direction === "horizontal" ? "width" : "height"];
     setItemSize(itemSize);
   };
-
-  useEffect(() => {
-    ref.current?.scrollTo({
-      [direction === "horizontal" ? "x" : "y"]:
-        itemSize * activeItem + gap * activeItem,
-      animated: true,
-    });
-  }, [size, activeItem]);
 
   return {
     ref,
