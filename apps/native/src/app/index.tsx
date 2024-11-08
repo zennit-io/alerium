@@ -1,18 +1,12 @@
 import { LinearGradient } from "@/components/general/linear-gradient";
 import { LayoutButton } from "@/components/home/layout-button";
 import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselIndicator,
-  CarouselItem,
-} from "@zennui/native/carousel";
+import { CarouselItem } from "@zennui/native/carousel";
 import { Text } from "@zennui/native/text";
 import { H1, H3 } from "@zennui/native/typography";
 import { Image } from "expo-image";
-import { Link, Redirect, useRouter } from "expo-router";
+import { Link, Redirect } from "expo-router";
 import { cssInterop } from "nativewind";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";

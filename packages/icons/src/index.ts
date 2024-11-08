@@ -99,3 +99,4 @@ export * from "./van";
 export * from "./wallet";
 export * from "./x";
 export * from "./view-3d";
+export * from "./scan";
