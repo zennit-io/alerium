@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -23,6 +24,7 @@ import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 import type { ViewProps as SlottableViewProps } from "../slot";
@@ -47,7 +49,7 @@ const useCarouselContext = () => {
 
   if (!context) {
     throw new Error(
-        "Carousel Compound Components should be used withing Carousel",
+      "Carousel Compound Components should be used withing Carousel",
     );
   }
 
@@ -55,48 +57,46 @@ const useCarouselContext = () => {
 };
 
 export type CarouselStyle = Partial<
-    | { paddingHorizontal: number; paddingLeft: number; paddingRight: number }
-    | {
-  paddingTop: number;
-  paddingBottom: number;
-  paddingVertical: number;
-}
+  | { paddingHorizontal: number; paddingLeft: number; paddingRight: number }
+  | {
+      paddingTop: number;
+      paddingBottom: number;
+      paddingVertical: number;
+    }
 >;
 
 export type CarouselProps = PropsWithChildren<
-    {
-      activeItem?: number;
-      onActiveItemChange?: (activeItem: number) => void;
-      defaultActiveItem?: number;
-      itemsPerPage?: number;
-      gap?: number;
-      direction?: Direction;
-    } & (
+  {
+    activeItem?: number;
+    onActiveItemChange?: (activeItem: number) => void;
+    defaultActiveItem?: number;
+    itemsPerPage?: number;
+    gap?: number;
+    direction?: Direction;
+  } & (
     | {
-  loop: true;
-  itemCount: number;
-}
+        loop: true;
+        itemCount: number;
+      }
     | {
-  loop?: false;
-  itemCount?: number;
-}
-    )
+        loop?: false;
+        itemCount?: number;
+      }
+  )
 >;
 export const Carousel = ({
-                           direction = "horizontal",
-                           itemCount,
-                           itemsPerPage = 1,
-                           gap = 4,
-                           activeItem,
-                           defaultActiveItem = 0,
-                           onActiveItemChange,
-                           loop,
-                           children,
-                         }: CarouselProps) => {
+  direction = "horizontal",
+  itemCount,
+  gap = 4,
+  activeItem,
+  defaultActiveItem = 0,
+  onActiveItemChange,
+  loop,
+  children,
+}: CarouselProps) => {
   const nativeId = useId();
   const instance = useCarousel({
     direction,
-    itemsPerPage,
     gap,
     activeItem,
     defaultActiveItem,
@@ -104,40 +104,22 @@ export const Carousel = ({
   });
 
   return (
-      <CarouselContext.Provider
-          value={{
-            instance,
-            nativeId,
-            itemCount,
-            direction,
-            gap,
-            loop,
-          }}
-      >
-        {children}
-      </CarouselContext.Provider>
+    <CarouselContext.Provider
+      value={{
+        instance,
+        nativeId,
+        itemCount,
+        direction,
+        gap,
+        loop,
+      }}
+    >
+      {children}
+    </CarouselContext.Provider>
   );
 };
 
 type Alignment = "start" | "center" | "end";
-
-const getAlignmentPadding = (
-    alignment: Alignment,
-    size: number,
-    itemSize: number,
-    screenSize: number,
-) => {
-  switch (alignment) {
-    case "start":
-      return 0;
-    case "center":
-      return (Math.max(size, screenSize) - itemSize) / 2;
-    case "end":
-      return size - itemSize;
-    default:
-      return 0;
-  }
-};
 
 type CarouselContentClassListKey = "root" | "content";
 
@@ -147,13 +129,13 @@ export type CarouselContentProps = SlottableViewProps & {
   style?: CarouselStyle;
 };
 export const CarouselContent = ({
-                                  align,
-                                  children,
-                                  style,
-                                  className,
-                                  classList,
-                                  ...props
-                                }: CarouselContentProps) => {
+  align,
+  children,
+  style,
+  className,
+  classList,
+  ...props
+}: CarouselContentProps) => {
   const { width, height } = useWindowDimensions();
   const {
     instance,
@@ -163,21 +145,28 @@ export const CarouselContent = ({
     loop: loopProp,
   } = useCarouselContext();
   const [loop, setLoop] = useState(loopProp);
-  const directionStyleKey =
-      direction === "horizontal" ? "Horizontal" : "Vertical";
   const isFocused = useIsFocused();
-  // const animatedRef = useAnimatedRef<Animated.ScrollView>();
-  // const scrollX = useSharedValue(300);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: shouldn't run on activeItem because is the initial scrollAmount
+  const scrollOffset = useMemo(() => {
+    return instance.itemSize * instance.activeItem + gap * instance.activeItem;
+  }, [instance.itemSize, gap]);
+
+  const paddingAxis = direction === "horizontal" ? "Horizontal" : "Vertical";
+  const padding =
+    (Math.max(instance.size, direction === "horizontal" ? width : height) -
+      instance.itemSize) /
+    2;
 
   useEffect(() => {
     if (!loop || !isFocused) return;
 
     const interval = setInterval(() => {
       if (itemCount && instance.activeItem === itemCount - 1) {
+        //  console.log("reset");
         instance.scrollTo(0);
         return;
       }
-
       instance.scrollNext();
     }, 3000);
 
@@ -187,44 +176,47 @@ export const CarouselContent = ({
   }, [loop, instance.activeItem, itemCount, isFocused]);
 
   return (
-      <Animated.ScrollView
-          {...props}
-          ref={instance.ref}
-          horizontal={direction === "horizontal"}
-          decelerationRate={"fast"}
-          scrollEventThrottle={1}
-          // snapToAlignment={align}
-          snapToInterval={instance.itemSize + gap}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          scrollToOverflowEnabled={true} // enables programmatic scroll on IOS
-          onScroll={instance.handleScroll}
-          onTouchMove={(event) => {
-            props.onTouchMove?.(event);
-            if (loop) setLoop(false);
-          }}
-          className={classList?.root}
-          contentContainerClassName={cn(
-              "items-center justify-center",
-              className,
-              classList?.content,
-          )}
-          contentContainerStyle={[
-            {
-              ...(align === "center"
-                  ? {
-                    [`padding${directionStyleKey}`]:
-                    (Math.max(instance.size, width) - instance.itemSize) / 2,
-                  }
-                  : {}),
-              gap,
-            },
-            style,
-          ]}
-          onLayout={instance.handleLayout}
-      >
-        {children}
-      </Animated.ScrollView>
+    <Animated.ScrollView
+      {...props}
+      ref={instance.ref}
+      horizontal={direction === "horizontal"}
+      decelerationRate={"fast"}
+      scrollEventThrottle={1}
+      // snapToAlignment={align}
+      contentOffset={{
+        x: direction === "horizontal" ? scrollOffset : 0,
+        y: direction === "vertical" ? scrollOffset : 0,
+      }}
+      snapToInterval={instance.itemSize + gap}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      scrollToOverflowEnabled={true} // enables programmatic scroll on IOS
+      onScroll={instance.handleScroll}
+      onTouchMove={(event) => {
+        props.onTouchMove?.(event);
+        if (loop) setLoop(false);
+      }}
+      className={classList?.root}
+      contentContainerClassName={cn(
+        "items-center justify-center",
+        className,
+        classList?.content,
+      )}
+      contentContainerStyle={[
+        {
+          ...(align === "center"
+            ? {
+                [`padding${paddingAxis}`]: padding,
+              }
+            : {}),
+          gap,
+        },
+        style,
+      ]}
+      onLayout={instance.handleLayout}
+    >
+      {children}
+    </Animated.ScrollView>
   );
 };
 
@@ -235,11 +227,11 @@ type CarouselIndicatorProps = {
 } & ViewProps;
 
 export const CarouselIndicator = ({
-                                    growthIndex,
-                                    className,
-                                    classList,
-                                    ...props
-                                  }: CarouselIndicatorProps) => {
+  growthIndex,
+  className,
+  classList,
+  ...props
+}: CarouselIndicatorProps) => {
   const { itemCount } = useCarouselContext();
 
   if (!itemCount) {
@@ -247,23 +239,23 @@ export const CarouselIndicator = ({
   }
 
   return (
-      <View
-          className={cn(
-              "w-full flex-row justify-center gap-2",
-              className,
-              classList?.root,
-          )}
-          {...props}
-      >
-        {Array.from({ length: itemCount ?? 0 }, (_, i) => i).map((index) => (
-            <CarouselIndicatorItem
-                key={index}
-                index={index}
-                growthIndex={growthIndex}
-                className={classList?.item}
-            />
-        ))}
-      </View>
+    <View
+      className={cn(
+        "w-full flex-row justify-center gap-2",
+        className,
+        classList?.root,
+      )}
+      {...props}
+    >
+      {Array.from({ length: itemCount ?? 0 }, (_, i) => i).map((index) => (
+        <CarouselIndicatorItem
+          key={index}
+          index={index}
+          growthIndex={growthIndex}
+          className={classList?.item}
+        />
+      ))}
+    </View>
   );
 };
 
@@ -273,96 +265,84 @@ type CarouselIndicatorItemProps = {
   className?: string;
 };
 export const CarouselIndicatorItem = ({
-                                        index,
-                                        growthIndex = 3,
-                                        className,
-                                      }: CarouselIndicatorItemProps) => {
+  index,
+  growthIndex = 3,
+  className,
+}: CarouselIndicatorItemProps) => {
   const { instance } = useCarouselContext();
-  const isFirstRender = useRef(true);
   const itemWidth = useSharedValue(0);
 
   const animatedStyles = useAnimatedStyle(() => {
     const input = instance.animation.scrollOffset.value / instance.itemSize;
-    // console.log("input", instance.itemSize);
     const inputRange = [index - 1, index, index + 1];
-
-    // console.log("width", itemWidth.value);
-    // console.log(input, "index", index);
 
     return {
       width: interpolate(
-          input,
-          inputRange,
-          [itemWidth.value, itemWidth.value * growthIndex, itemWidth.value],
-          Extrapolation.CLAMP,
+        input,
+        inputRange,
+        [itemWidth.value, itemWidth.value * growthIndex, itemWidth.value],
+        Extrapolation.CLAMP,
       ),
       opacity: interpolate(
-          input,
-          inputRange,
-          [0.15, 1, 0.15],
-          Extrapolation.CLAMP,
+        input,
+        inputRange,
+        [0.15, 1, 0.15],
+        Extrapolation.CLAMP,
       ),
     };
   });
 
   return (
-      <Pressable onPress={() => instance.scrollTo(2)}>
-        <Animated.View
-            key={index}
-            className={cn("rounded-full bg-emphasis", className)}
-            style={animatedStyles}
-        >
-          <View
-              className={cn("size-3", className, "opacity-0")}
-              onLayout={({ nativeEvent }) => {
-                if (!isFirstRender.current) return;
+    <Pressable onPress={() => instance.scrollTo(index)}>
+      <Animated.View
+        key={index}
+        className={cn("rounded-full bg-emphasis", className)}
+        style={animatedStyles}
+      >
+        <View
+          className={cn("size-3", className, "opacity-0")}
+          onLayout={({ nativeEvent }) => {
+            if (itemWidth.value > 0) return;
 
-                itemWidth.value = nativeEvent.layout.width;
-                isFirstRender.current = false;
-              }}
-          />
-        </Animated.View>
-      </Pressable>
+            itemWidth.value = nativeEvent.layout.width;
+          }}
+        />
+      </Animated.View>
+    </Pressable>
   );
 };
-
+export type CarouselItemAnimateFn = (
+  scrollOffset: number,
+  index: number,
+  itemSize: number,
+) => StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
 export type CarouselItemProps = SlottableViewProps & {
   index: number;
-  animate?: (
-      scrollOffset: number,
-      index: number,
-      itemSize: number,
-  ) => StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  animate?: CarouselItemAnimateFn;
 };
 export const CarouselItem = ({
-                               index,
-                               style,
-                               animate,
-                               ...props
-                             }: CarouselItemProps) => {
-  const { instance, direction } = useCarouselContext();
+  index,
+  style,
+  animate,
+  ...props
+}: CarouselItemProps) => {
+  const { instance } = useCarouselContext();
 
   const animatedStyles = useAnimatedStyle(() => {
     return (animate?.(
-        instance.animation.scrollOffset.value,
-        index,
-        instance.itemSize,
+      instance.animation.scrollOffset.value,
+      index,
+      instance.itemSize,
     ) ?? {}) as ViewStyle;
   });
 
   return (
-      <Animated.View
-          key={index}
-          style={[
-            // {
-            //   [direction === "horizontal" ? "width" : "height"]: instance.itemSize,
-            // },
-            style,
-            animatedStyles,
-          ]}
-          onLayout={instance.handleItemLayout}
-          {...props}
-      />
+    <Animated.View
+      key={index}
+      style={[style, animatedStyles]}
+      onLayout={instance.handleItemLayout}
+      {...props}
+    />
   );
 };
 

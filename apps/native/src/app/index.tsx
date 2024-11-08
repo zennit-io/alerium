@@ -1,4 +1,5 @@
 import { LinearGradient } from "@/components/general/linear-gradient";
+import { LayoutButton } from "@/components/home/layout-button";
 import { Button } from "@zennui/native/button";
 import {
   Carousel,
@@ -7,7 +8,7 @@ import {
   CarouselItem,
 } from "@zennui/native/carousel";
 import { Text } from "@zennui/native/text";
-import { H1 } from "@zennui/native/typography";
+import { H1, H3 } from "@zennui/native/typography";
 import { Image } from "expo-image";
 import { Link, Redirect, useRouter } from "expo-router";
 import { cssInterop } from "nativewind";
@@ -110,6 +111,10 @@ export default () => {
             </Text>
           </Link>
         </View>
+
+        {/*<RoomCarousel />*/}
+        <H3 className={"font-header font-normal text-3xl px-6"}>Maintenance</H3>
+        <LayoutButton />
       </View>
       <LinearGradient
         colors={["rgba(57,181,74,0)", "rgba(57,181,74,0.6)"]}
