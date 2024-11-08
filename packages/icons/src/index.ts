@@ -9,6 +9,7 @@ export * from "./bell";
 export * from "./bicycle";
 export * from "./book";
 export * from "./briefcase";
+export * from "./building";
 export * from "./bus";
 export * from "./calendar";
 export * from "./calendar-tick";
@@ -97,4 +98,5 @@ export * from "./user-list";
 export * from "./van";
 export * from "./wallet";
 export * from "./x";
-export * from "./view-3d"
+export * from "./view-3d";
+export * from "./scan";

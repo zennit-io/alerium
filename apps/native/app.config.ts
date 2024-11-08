@@ -1,4 +1,4 @@
-import type { ExpoConfig, ConfigContext } from "expo/config";
+import type { ConfigContext, ExpoConfig } from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -46,5 +46,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ],
   experiments: {
     typedRoutes: true,
+  },
+  extra: {
+    eas: {
+      projectId: "da4896cb-12b6-4dba-b85c-c9181f7bfc90",
+    },
   },
 });

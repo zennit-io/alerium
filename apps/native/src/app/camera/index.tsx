@@ -1,16 +1,16 @@
 import { Camera } from "@/components/camera/camera";
-import { useSkiaFrameProcessor } from "react-native-vision-camera";
+import { PaintStyle, Skia } from "@shopify/react-native-skia";
 import {
   ColorConversionCodes,
   ContourApproximationModes,
   DataTypes,
   ObjectType,
   OpenCV,
-  RetrievalModes,
   type Rect,
+  RetrievalModes,
 } from "react-native-fast-opencv";
+import { useSkiaFrameProcessor } from "react-native-vision-camera";
 import { useResizePlugin } from "vision-camera-resize-plugin";
-import { Skia, PaintStyle } from "@shopify/react-native-skia";
 
 const paint = Skia.Paint();
 paint.setStyle(PaintStyle.Fill);
