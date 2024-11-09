@@ -5,10 +5,10 @@ import { Link } from "expo-router";
 
 export const LayoutButton = () => {
   return (
-    <Link asChild href={"/scan-label"}>
+    <Link asChild href={"/expertise"}>
       <Button
         className={
-          "w-[90%] self-center z-10  mx-auto py-2 gap-3 flex-row items-center justify-center bg-primary absolute shadow-primary/40 shadow bottom-6"
+          "w-[90%] self-center z-10 mx-auto py-2 gap-3 flex-row items-center justify-center bg-primary absolute shadow-primary/40 shadow bottom-6"
         }
       >
         <View3DIcon className={"text-white size-10"} strokeWidth={1.5} />
