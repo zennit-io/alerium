@@ -16,24 +16,24 @@ import {
   type CarouselItemProps,
 } from "./carousel";
 
+import type { PropsWithClassName } from "@zenncore/types/components";
+import type { Tuple } from "@zenncore/types/utilities";
 import {
-  DrawerHandle,
-  type SnapPoint,
-  useDrawer,
-  type UseDrawerReturn,
-} from "./drawer";
-import { Portal } from "./portal";
-import { Text } from "./text";
-import type { PressableProps } from "./slot";
-import {
-  createContext,
   type Dispatch,
   type PropsWithChildren,
   type SetStateAction,
+  createContext,
   useContext,
 } from "react";
-import type { PropsWithClassName } from "@zenncore/types/components";
-import type { Tuple } from "@zenncore/types/utilities";
+import {
+  DrawerHandle,
+  type SnapPoint,
+  type UseDrawerReturn,
+  useDrawer,
+} from "./drawer";
+import { Portal } from "./portal";
+import type { PressableProps } from "./slot";
+import { Text } from "./text";
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = Array.from({ length: 60 }, (_, i) => i);
 
@@ -302,7 +302,7 @@ const TimePickerItem = ({ index, value, className }: TimePickerItemProps) => {
     >
       <Animated.Text
         className={cn(
-          "items-center tabular-nums justify-center font-bold text-foreground text-xl tabular-nums leading-[50px]",
+          "items-center justify-center font-bold text-foreground text-xl tabular-nums tabular-nums leading-[50px]",
           className,
         )}
         style={{ color, fontSize }}

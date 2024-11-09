@@ -1,28 +1,16 @@
-import { LinearGradient } from "@/components/general/linear-gradient";
-import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselIndicator,
-  CarouselItem,
-} from "@zennui/native/carousel";
-import { Text } from "@zennui/native/text";
-import { H1, H3 } from "@zennui/native/typography";
-import { Image } from "expo-image";
-import { Link } from "expo-router";
-import { cssInterop } from "nativewind";
-import { useTranslation } from "react-i18next";
-import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import Animated, {
-  Extrapolation,
-  interpolate,
-  useSharedValue,
-} from "react-native-reanimated";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import {LinearGradient} from "@/components/general/linear-gradient";
+import {Button} from "@zennui/native/button";
+import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
+import {Text} from "@zennui/native/text";
+import {H1} from "@zennui/native/typography";
+import {Image} from "expo-image";
+import {Link} from "expo-router";
+import {cssInterop} from "nativewind";
+import {useTranslation} from "react-i18next";
+import {View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import Animated, {useSharedValue} from "react-native-reanimated";
+import {SafeAreaView, useSafeAreaInsets,} from "react-native-safe-area-context";
 
 cssInterop(Image, { className: "style" });
 cssInterop(ScrollView, { className: "style" });
@@ -51,19 +39,15 @@ export default () => {
     <>
       <View className="z-10 flex-1">
         <View className="gap-4">
-          {/* <Carousel
-            defaultActiveItem={2}
-            itemCount={ONBOARD_SECTIONS.length}
-            loop
-          >
+          <Carousel itemCount={ONBOARD_SECTIONS.length} loop>
             <CarouselContent>
               {ONBOARD_SECTIONS.map((onboardSection, index) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <OnboardSection key={index} {...onboardSection} index={index} />
               ))}
             </CarouselContent>
-            <CarouselIndicator growthIndex={5} />
-          </Carousel> */}
+            {/*<CarouselIndicator growthIndex={5} />*/}
+          </Carousel>
         </View>
         <View
           className={"mt-auto gap-6 px-6"}
@@ -79,27 +63,17 @@ export default () => {
               </Text>
             </Button>
           </Link>
-          <Link href={"/register"} asChild>
+          <Link href={"/home"} asChild>
             <Button color={"primary"}>
               <Text
-                className={"font-header"}
+                className={"font-header text-foreground"}
                 style={{ fontFamily: "RFDewiExtended-Bold" }}
               >
-                Register your account
+                Developer Gateway
               </Text>
             </Button>
           </Link>
-
-          <Link href={"/home"} asChild>
-            <Text
-              className={"-top-12 absolute self-center text-center text-2xl"}
-            >
-              Developer Gateway
-            </Text>
-          </Link>
         </View>
-
-        <H3 className={"font-header font-normal text-3xl px-6"}>Maintenance</H3>
       </View>
       <LinearGradient
         colors={["rgba(255,89,0,0)", "rgba(255,89,0,0.6)"]}
@@ -127,31 +101,31 @@ const OnboardSection = ({
       key={index}
       index={index}
       className="w-screen"
-      animate={(scrollOffset, index, itemSize) => {
-        "worklet";
-        const input = scrollOffset / itemSize;
-        const inputRange = [index - 1, index, index + 1];
-
-        const opacity = interpolate(
-          input,
-          inputRange,
-          [0, 1, 0],
-          Extrapolation.CLAMP,
-        );
-
-        titleTranslateX.value = interpolate(
-          input,
-          inputRange,
-          [300, 0, -300],
-          Extrapolation.CLAMP,
-        );
-
-        return {
-          opacity,
-        };
-      }}
+      // animate={(scrollOffset, index, itemSize) => {
+      //   "worklet";
+      //   const input = scrollOffset / itemSize;
+      //   const inputRange = [index - 1, index, index + 1];
+      //
+      //   const opacity = interpolate(
+      //     input,
+      //     inputRange,
+      //     [0, 1, 0],
+      //     Extrapolation.CLAMP,
+      //   );
+      //
+      //   titleTranslateX.value = interpolate(
+      //     input,
+      //     inputRange,
+      //     [300, 0, -300],
+      //     Extrapolation.CLAMP,
+      //   );
+      //
+      //   return {
+      //     opacity,
+      //   };
+      // }}
     >
-      <Image source={image} className={"h-[55vh]"} />
+      <Image source={image} className={"h-[55vh]"} contentFit={"contain"} />
       <Animated.View
         className="gap-2 px-6"
         style={{

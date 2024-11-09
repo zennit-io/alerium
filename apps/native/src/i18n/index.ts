@@ -1,9 +1,9 @@
+import translationAl from "@/assets/translations/al.json";
+import translationEn from "@/assets/translations/en.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import translationAl from "@/assets/translations/al.json";
-import translationEn from "@/assets/translations/en.json";
 
 export const LANGUAGES = ["en", "al"] as const;
 

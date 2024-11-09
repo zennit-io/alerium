@@ -1,44 +1,41 @@
-import { LinearGradient as CustomLinearGradient } from "@/components/general/linear-gradient";
-import { LayoutButton } from "@/components/home/layout-button";
-import { RoomCarousel } from "@/components/home/room-carousel";
-import { BellIcon, BuildingIcon, SettingsIcon } from "@zennui/icons";
-import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@zennui/native/carousel";
-import { Text } from "@zennui/native/text";
-import { H1, H3 } from "@zennui/native/typography";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
-import { cssInterop } from "nativewind";
-import { StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {LinearGradient as CustomLinearGradient} from "@/components/general/linear-gradient";
+import {LayoutButton} from "@/components/home/layout-button";
+import {BellIcon, BuildingIcon, SettingsIcon} from "@zennui/icons";
+import {Button} from "@zennui/native/button";
+import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
+import {Text} from "@zennui/native/text";
+import {H1, H3} from "@zennui/native/typography";
+import {Image} from "expo-image";
+import {LinearGradient} from "expo-linear-gradient";
+import {cssInterop} from "nativewind";
+import {Pressable, StyleSheet, View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {Link} from "expo-router";
 
 cssInterop(LinearGradient, { className: "style" });
 
 export default () => {
+
   return (
     <>
       <ScrollView contentContainerClassName="pb-16">
         <Image
           source={require("@assets/images/radial-gradient.png")}
-          className="size-80 absolute"
+          className="absolute size-80"
         />
-        <SafeAreaView className={"flex-1 w-full flex gap-4"}>
-          <View className={"flex-1 w-full gap-10"}>
+        <SafeAreaView className={"flex w-full flex-1 gap-4"}>
+          <View className={"w-full flex-1 gap-10"}>
             <View
-              className={"flex-row flex items-start justify-between px-6 pt-6 "}
+              className={"flex flex-row items-start justify-between px-6 pt-6 "}
             >
               <View>
                 <H1 className={"font-normal text-5xl"}>Hi, John!</H1>
-                <H3 className={"font-normal text-xl text-foreground-dimmed"}>
-                  Welcome to KONE App
+                <H3 className={"font-normal text-foreground-dimmed text-xl"}>
+                  Welcome to ALERIUM
                 </H3>
               </View>
-              <View className={" flex-row flex items-center gap-4"}>
+              <View className={"flex flex-row items-center gap-4"}>
                 <Button
                   className={"size-12 rounded-full border-0 "}
                   style={styles.shadow}
@@ -56,7 +53,10 @@ export default () => {
 
             {/*<RoomCarousel />*/}
             <View className="gap-6">
-              <H3 className={"font-header font-bold text-3xl px-6"}>
+              <H3
+                className={"px-6 font-bold font-header text-3xl"}
+                style={{ fontFamily: "RFDewiExtended-Bold" }}
+              >
                 Categories
               </H3>
 
@@ -66,16 +66,16 @@ export default () => {
                     <CarouselItem
                       key={id}
                       index={index}
-                      className="w-[250px] h-44 rounded-2xl overflow-hidden"
+                      className="h-44 w-[250px] overflow-hidden rounded-2xl"
                     >
                       <Image source={image} className="size-full bg-red-500" />
                       <View className="absolute size-full justify-end">
-                        <Text className="py-2 px-4 z-10 font-medium text-primary text-2xl">
+                        <Text className="z-10 px-4 py-2 font-medium text-2xl text-foreground">
                           {title}
                         </Text>
                         <LinearGradient
                           colors={["transparent", "black"]}
-                          className="w-full h-16 absolute"
+                          className="absolute h-16 w-full"
                         />
                       </View>
                     </CarouselItem>
@@ -84,26 +84,31 @@ export default () => {
               </Carousel>
             </View>
             <View className="gap-6">
-              <H3 className={"font-header font-bold text-3xl px-6"}>
+              <H3
+                className={"px-6 font-bold font-header text-3xl"}
+                style={{ fontFamily: "RFDewiExtended-Bold" }}
+              >
                 Recent Surveys
               </H3>
               <View className="gap-3">
-                {RECENT_SURVEYS.map(({ id, title, date, Icon }, index) => (
-                  <View
+                {RECENT_SURVEYS.map(({ id, title, date, Icon }) => (
+                  <Link
+                    href={`/survey/${encodeURIComponent(title)}`}
                     key={id}
-                    className="flex-row items-center gap-4 px-6 rounded-2xl"
+                    asChild
                   >
-                    <Icon className="text-primary size-9" />
-                    <View className="flex-1 border-b border-border pb-3">
-                      <Text className="font-medium text-foreground text-2xl">
-                        {title}
-                      </Text>
-
-                      <Text className="text-sm border-b border-red-500 text-foreground-dimmed">
-                        {date}
-                      </Text>
-                    </View>
-                  </View>
+                    <Pressable className="flex-row items-center gap-4 rounded-2xl px-6">
+                      <Icon className="size-9 text-primary" />
+                      <View className="flex-1 border-border border-b pb-3">
+                        <Text className="font-medium text-2xl text-foreground">
+                          {title}
+                        </Text>
+                        <Text className="border-red-500 border-b text-foreground-dimmed text-sm">
+                          {date}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  </Link>
                 ))}
               </View>
             </View>
@@ -113,7 +118,7 @@ export default () => {
       <LayoutButton />
       <CustomLinearGradient
         inverted
-        className="absolute bottom-0 w-full h-40"
+        className="absolute bottom-0 h-40 w-full"
       />
     </>
   );

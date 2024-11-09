@@ -1,17 +1,10 @@
 {
-  "extends": [
-    "expo/tsconfig.base",
-    "@zenncore/config/typescript/native"
-  ],
+  "extends": ["expo/tsconfig.base", "@zenncore/config/typescript/native"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@assets/*": [
-        "./assets/*"
-      ]
+      "@/*": ["./src/*"],
+      "@assets/*": ["./assets/*"]
     }
   },
   "include": [

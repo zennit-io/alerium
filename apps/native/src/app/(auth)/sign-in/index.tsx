@@ -1,20 +1,12 @@
-import {
-  type FormConfig,
-  FormSubmitButton,
-  InferredForm,
-  type InferredFormFields,
-  field,
-} from "@zennui/native/form";
-import { Text } from "@zennui/native/text";
-import { useRouter } from "expo-router";
-import type { SubmitHandler } from "react-hook-form";
-import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
-import { z } from "zod";
+import {field, type FormConfig, FormSubmitButton, InferredForm, type InferredFormFields,} from "@zennui/native/form";
+import {Text} from "@zennui/native/text";
+import {useRouter} from "expo-router";
+import type {SubmitHandler} from "react-hook-form";
+import {View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import {SafeAreaView, useSafeAreaInsets,} from "react-native-safe-area-context";
+import {z} from "zod";
+import {Header} from "@/components/general/header";
 
 const config = {
   email: field({
@@ -65,29 +57,32 @@ export default () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: top }}>
-      <ScrollView
-        contentContainerClassName={"android:pb-28"}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={"handled"}
-      >
-        <View className="gap-6 px-6">
-          <InferredForm
-            config={config}
-            className="gap-4"
-            onSubmit={(data) => handleFormSubmit(data)}
-          >
-            <FormSubmitButton className="w-full">
-              <Text className="text-2xl">Log in</Text>
-            </FormSubmitButton>
-          </InferredForm>
-          <View className="my-4 flex-row items-center gap-4">
-            <View className="h-px flex-1 bg-foreground-dimmed" />
-            <Text className="text-foreground text-lg">{t("or")}</Text>
-            <View className="h-px flex-1 bg-foreground-dimmed" />
+    <>
+      <Header title={"Sign In"} />
+      <SafeAreaView style={{ flex: 1, paddingTop: top }}>
+        <ScrollView
+          contentContainerClassName={"android:pb-28"}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={"handled"}
+        >
+          <View className="gap-6 px-6">
+            <InferredForm
+              config={config}
+              className="gap-4"
+              onSubmit={(data) => handleFormSubmit(data)}
+            >
+              <FormSubmitButton className="w-full">
+                <Text className="text-2xl">Log in</Text>
+              </FormSubmitButton>
+            </InferredForm>
+            <View className="my-4 flex-row items-center gap-4">
+              <View className="h-px flex-1 bg-foreground-dimmed" />
+              <Text className="text-foreground text-lg">Or</Text>
+              <View className="h-px flex-1 bg-foreground-dimmed" />
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
