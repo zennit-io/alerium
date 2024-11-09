@@ -83,7 +83,7 @@ export default () => {
             </View>
           </View>
         </View>
-        <Link href={"/scanned-info"} asChild>
+        <Link href={"/details"} asChild>
           <Button
             color={"primary"}
             className="absolute self-center bottom-6 w-full"

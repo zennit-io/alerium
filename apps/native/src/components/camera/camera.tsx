@@ -1,3 +1,5 @@
+import { Text } from "@zennui/native/text";
+import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import {
   Camera as CameraPrimitive,
@@ -5,8 +7,6 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from "react-native-vision-camera";
-import { Text } from "@zennui/native/text";
-import { useEffect } from "react";
 
 export const Camera = (props: Partial<CameraPrimitiveProps>) => {
   const { hasPermission, requestPermission } = useCameraPermission();
