@@ -23,7 +23,7 @@ export const getSurveyById = query({
 
     return {
       ...survey,
-      reports: [...reports],
+      reports,
     };
   },
 });
@@ -46,13 +46,11 @@ export const updateSurvey = mutation({
   args: {
     id: v.id("surveys"),
     name: v.optional(v.string()),
-    location: v.optional(
-      v.object({
-        address: v.optional(v.string()),
-        longitude: v.optional(v.float64()),
-        latitude: v.optional(v.float64()),
-      }),
-    ),
+    location: v.object({
+      address: v.string(),
+      longitude: v.float64(),
+      latitude: v.float64(),
+    }),
   },
   handler: async (ctx, args) => {
     return await ctx.db.patch(args.id, args);

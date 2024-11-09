@@ -1,23 +1,16 @@
-import { LinearGradient } from "@/components/general/linear-gradient";
-import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@zennui/native/carousel";
-import { Text } from "@zennui/native/text";
-import { H1 } from "@zennui/native/typography";
-import { Image } from "expo-image";
-import { Link } from "expo-router";
-import { cssInterop } from "nativewind";
-import { useTranslation } from "react-i18next";
-import { View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import Animated, { useSharedValue } from "react-native-reanimated";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import {LinearGradient} from "@/components/general/linear-gradient";
+import {Button} from "@zennui/native/button";
+import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
+import {Text} from "@zennui/native/text";
+import {H1} from "@zennui/native/typography";
+import {Image} from "expo-image";
+import {Link} from "expo-router";
+import {cssInterop} from "nativewind";
+import {useTranslation} from "react-i18next";
+import {View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import Animated, {useSharedValue} from "react-native-reanimated";
+import {SafeAreaView, useSafeAreaInsets,} from "react-native-safe-area-context";
 
 cssInterop(Image, { className: "style" });
 cssInterop(ScrollView, { className: "style" });
@@ -46,15 +39,15 @@ export default () => {
     <>
       <View className="z-10 flex-1">
         <View className="gap-4">
-          {/* <Carousel itemCount={ONBOARD_SECTIONS.length} loop>
+          <Carousel itemCount={ONBOARD_SECTIONS.length} loop>
             <CarouselContent>
               {ONBOARD_SECTIONS.map((onboardSection, index) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <OnboardSection key={index} {...onboardSection} index={index} />
               ))}
             </CarouselContent>
-            <CarouselIndicator growthIndex={5} />
-          </Carousel> */}
+            {/*<CarouselIndicator growthIndex={5} />*/}
+          </Carousel>
         </View>
         <View
           className={"mt-auto gap-6 px-6"}

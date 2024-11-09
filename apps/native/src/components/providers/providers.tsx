@@ -5,7 +5,6 @@ import {StatusBar} from "expo-status-bar";
 import type {PropsWithChildren} from "react";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {ThemeProvider} from "./theme-provider";
-import {ScannedInfoProvider} from "@/components/providers/scanned-info";
 import {ConvexProvider} from "@/components/providers/convex-provider";
 
 export const Providers = ({ children }: PropsWithChildren) => {
@@ -13,16 +12,14 @@ export const Providers = ({ children }: PropsWithChildren) => {
 
   return (
     <ConvexProvider>
-      <ScannedInfoProvider>
-        <ThemeProvider>
-          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <DrawerRootProvider>{children}</DrawerRootProvider>
-            {/*<Toaster />*/}
-            <PortalHost />
-          </GestureHandlerRootView>
-        </ThemeProvider>
-      </ScannedInfoProvider>
+      <ThemeProvider>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <DrawerRootProvider>{children}</DrawerRootProvider>
+          {/*<Toaster />*/}
+          <PortalHost />
+        </GestureHandlerRootView>
+      </ThemeProvider>
     </ConvexProvider>
   );
 };

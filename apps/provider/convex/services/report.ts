@@ -1,11 +1,10 @@
-import { v } from "convex/values";
-import { mutation, query } from "../_generated/server";
-import { getUser } from "./_utils/user";
+import {v} from "convex/values";
+import {mutation, query} from "../_generated/server";
+
 
 export const getAllReports = query({
   args: {},
   handler: async (ctx) => {
-    await getUser(ctx);
     return await ctx.db.query("reports").collect();
   },
 });
@@ -15,7 +14,6 @@ export const getReportsOfSurvey = query({
     survey: v.id("surveys"),
   },
   handler: async (ctx, { survey }) => {
-    await getUser(ctx);
     return await ctx.db
       .query("reports")
       .filter((q) => q.eq(q.field("survey"), survey))
@@ -28,7 +26,6 @@ export const getReportById = query({
     id: v.id("reports"),
   },
   handler: async (ctx, { id }) => {
-    await getUser(ctx);
     return await ctx.db
       .query("reports")
       .filter((q) => q.eq(q.field("_id"), id))
@@ -38,7 +35,6 @@ export const getReportById = query({
 
 export const saveReport = mutation({
   args: {
-    survey: v.id("surveys"),
     serialNumber: v.string(),
     deviceName: v.string(),
     deviceType: v.string(),
@@ -46,20 +42,18 @@ export const saveReport = mutation({
     manufacturer: v.string(),
     model: v.string(),
     weight: v.optional(v.float64()),
+    survey: v.id("surveys"),
     checkedBy: v.id("users"),
     checkedAt: v.int64(),
     note: v.optional(v.string()),
-    location: v.optional(
-      v.object({
-        address: v.optional(v.string()),
-        longitude: v.optional(v.float64()),
-        latitude: v.optional(v.float64()),
-      }),
-    ),
-    otherMetaData: v.optional(v.any()),
+    location: v.object({
+      address: v.string(),
+      longitude: v.float64(),
+      latitude: v.float64(),
+    }),
+    otherMetadata: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    await getUser(ctx);
     return await ctx.db.insert("reports", args);
   },
 });
@@ -88,7 +82,6 @@ export const updateReport = mutation({
     otherMetaData: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
-    await getUser(ctx);
     return await ctx.db.patch(args.id, args);
   },
 });
@@ -98,7 +91,15 @@ export const deleteReport = mutation({
     id: v.id("reports"),
   },
   handler: async (ctx, { id }) => {
-    await getUser(ctx);
     return await ctx.db.delete(id);
+  },
+});
+
+export const retrieveBIM = query({
+  args: {
+    id: v.id("_storage"),
+  },
+  handler: async (ctx, { id }) => {
+    return await ctx.storage.getUrl(id);
   },
 });

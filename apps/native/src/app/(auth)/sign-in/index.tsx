@@ -7,6 +7,7 @@ import {ScrollView} from "react-native-gesture-handler";
 import {SafeAreaView, useSafeAreaInsets,} from "react-native-safe-area-context";
 import {z} from "zod";
 import {Header} from "@/components/general/header";
+import {useAuthActions} from "@convex-dev/auth/react";
 
 const config = {
   email: field({
@@ -49,11 +50,17 @@ const config = {
 export default () => {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
+  const { signIn } = useAuthActions();
 
   const handleFormSubmit: SubmitHandler<
     InferredFormFields<typeof config>
   > = async (data) => {
-    router.push("/home");
+    try {
+      signIn("password", { ...data, flow: "signIn" });
+      router.push("/home");
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (

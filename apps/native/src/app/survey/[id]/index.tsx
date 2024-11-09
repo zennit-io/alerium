@@ -2,22 +2,100 @@ import {Environment, OrbitControls, useGLTF} from "@react-three/drei/native";
 import {Canvas, type Vector3} from "@react-three/fiber/native";
 import {Suspense, useState} from "react";
 import {Header} from "@/components/general/header";
-import {Drawer, DrawerContent} from "@zennui/native/drawer";
+import {Drawer, DrawerContent, DrawerTrigger} from "@zennui/native/drawer";
 import {H1, H3, P} from "@zennui/native/typography";
 import {View} from "react-native";
 import {Text} from "@zennui/native/text";
-import {EditIcon} from "@zennui/icons";
+import {EditIcon, InfoIcon} from "@zennui/icons";
 import {Image} from "expo-image";
 import {Link, useLocalSearchParams} from "expo-router";
 import {Button} from "@zennui/native/button";
+import {api} from "@junction/provider/convex/_generated/api";
+import {useQuery} from "convex/react";
+import type {DataModel, Id,} from "@junction/provider/convex/_generated/dataModel";
+import OpenAI from "openai";
+import {useQuery as useReactQuery} from "@tanstack/react-query";
+import type {Result} from "@zenncore/types/utilities";
+
+const client = new OpenAI({
+  apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
+  organization: process.env.EXPO_PUBLIC_OPENAI_ORGANIZATION_ID,
+});
+
+const askChat = async (
+  content: DataModel["surveys"]["document"],
+): Promise<Result<string, string>> => {
+  try {
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant. You are working on assisting an expert that works on building maintaince, things like escalators, elevators, doors etc..., the following info is a compiled info list of a devices specifications, and you need to summarize it in a few sentences, maybe estimate cost of device, condition and more...",
+        },
+        {
+          role: "user",
+          content: `Summarize: ${JSON.stringify(content)}`,
+        },
+      ],
+    });
+
+    const responseText = completion.choices[0]?.message.content;
+    if (!responseText) {
+      return {
+        error: "No response from OpenAI",
+        success: false,
+      };
+    }
+    return {
+      data: responseText,
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error in askChat:", error);
+    return {
+      error: String(error),
+      success: false,
+    };
+  }
+};
 
 export default () => {
   const [isOpen, setIsOpen] = useState(false);
   const params = useLocalSearchParams<{ id: string }>();
-  const id = decodeURIComponent(params.id);
+  const id = decodeURIComponent(params.id) as Id<"surveys">;
+
+  const survey = useQuery(api.services.survey.getSurveyById, {
+    id,
+  });
+  const url = useQuery(
+    api.services.report.retrieveBIM,
+    survey?.bim
+      ? {
+          id: survey.bim,
+        }
+      : "skip",
+  );
+
+  const { data: chatResponse, isLoading } = useReactQuery({
+    queryKey: ["survey", id, survey],
+    queryFn: async () => {
+      if (!survey) return null;
+      const response = await askChat(survey);
+      if (!response.success) return null;
+      console.log("response", response);
+      return response.data;
+    },
+  });
+
+  if (!survey) return null;
   return (
-    <>
-      <Header title={"View 3D"} subtitle={id}/>
+    <Drawer>
+      <Header title={"View 3D"} subtitle={survey?.name} />
+      <DrawerTrigger className="absolute top-24 z-[1100] right-8" asChild>
+        <InfoIcon className="size-8 text-primary" />
+      </DrawerTrigger>
       <Canvas
         camera={{
           position: [0, 0, -50],
@@ -43,7 +121,7 @@ export default () => {
         <OrbitControls />
         <Suspense>
           <Environment preset="park" />
-          <Model />
+          {url ? <Model url={url} /> : null}
           <Pin position={[3.5, 9.5, 0]} onClick={() => setIsOpen(true)} />
           <Pin position={[12, 2, -12]} onClick={() => setIsOpen(true)} />
         </Suspense>
@@ -98,19 +176,25 @@ export default () => {
           />
           <Link href={`/survey/${params.id}/expanded`} asChild>
             <Button color={"primary"}>
-              <Text>More Info</Text>
+              <H3 className={"text-white text-2xl font-normal"}>More Info</H3>
             </Button>
           </Link>
         </DrawerContent>
       </Drawer>
-    </>
+      <DrawerContent className={"px-6 gap-2"}>
+        <H1>Summary</H1>
+        <P>{isLoading ? "Loading..." : (chatResponse ?? "No data")}</P>
+      </DrawerContent>
+    </Drawer>
   );
 };
+type ModelProps = {
+  url: string;
+};
 
-const Model = () => {
-  const asset: string = require("@assets/models/house.glb");
-
-  const { scene } = useGLTF(asset);
+const Model = ({ url }: ModelProps) => {
+  const fallback: string = require("@assets/models/house.glb");
+  const { scene } = useGLTF(url ?? fallback);
   return (
     <primitive
       object={scene}
@@ -120,7 +204,6 @@ const Model = () => {
   );
 };
 
-// Pin component with click interaction
 const Pin = ({
   position,
   onClick,

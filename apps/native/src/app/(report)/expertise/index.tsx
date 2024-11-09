@@ -15,6 +15,7 @@ import Animated, {
 } from "react-native-reanimated";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useScannedInfo} from "@/components/providers/scanned-info";
+import {H3} from "@zennui/native/typography";
 
 export default () => {
   const { top, bottom } = useSafeAreaInsets();
@@ -26,10 +27,9 @@ export default () => {
   useSpeechRecognitionEvent("end", () => setIsListening(false));
   useSpeechRecognitionEvent("result", (event) => {
     const content = event.results[0]?.transcript;
-    console.log("transcript:", content);
 
     if (!content) return;
-    setOutput((previousState) => ({
+    setOutput((previousState = {}) => ({
       ...previousState,
       voiceValue: content,
     }));
@@ -140,10 +140,10 @@ export default () => {
         <Link href={"/details"} asChild>
           <Button
             color={"primary"}
-            className="absolute self-center mb-24 w-full"
+            className="absolute self-center mb-6 w-full"
             style={{ bottom }}
           >
-            <Text>Continue</Text>
+            <H3 className={"text-white text-2xl font-normal"}>Continue</H3>
           </Button>
         </Link>
       </View>

@@ -6,9 +6,14 @@ import {H3, P} from "@zennui/native/typography";
 import {Link} from "expo-router";
 import {View} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {retrieveDataFromScannedText} from "@/app/(report)/details";
+import {useScannedInfo} from "@/components/providers/scanned-info";
 
 export default () => {
   const { top, bottom } = useSafeAreaInsets();
+  const [output = {}] = useScannedInfo();
+  const data = retrieveDataFromScannedText(output.scannedValue);
+
   return (
     <>
       <Header title="Scanned Info" />
@@ -25,9 +30,11 @@ export default () => {
           </P>
           <View className="flex-row gap-8 justify-between">
             <View className="flex-1">
-              <H3 className="3xl">Manifacture</H3>
+              <H3 className="3xl">Manufacturer</H3>
               <View className="flex-row items-center justify-between gap-2">
-                <Text className="text-2xl text-foreground-dimmed">Kone</Text>
+                <Text className="text-2xl text-foreground-dimmed">
+                  {data.manufacturer}
+                </Text>
                 <EditIcon className="text-foreground-dimmed/50  size-6" />
               </View>
             </View>
@@ -35,7 +42,7 @@ export default () => {
               <H3 className="3xl">Scan ID</H3>
               <View className="flex-row items-center justify-between gap-2">
                 <Text className="text-2xl text-foreground-dimmed">
-                  S67665834
+                  {data.serialNumber}
                 </Text>
                 <EditIcon className="text-foreground-dimmed/50  size-6" />
               </View>
@@ -46,7 +53,7 @@ export default () => {
               <H3 className="3xl">Model</H3>
               <View className="flex-row items-center justify-between gap-2">
                 <Text className="text-2xl text-foreground-dimmed">
-                  SpeedElev
+                  {data.model}
                 </Text>
                 <EditIcon className="text-foreground-dimmed/50 size-6" />
               </View>
@@ -54,7 +61,9 @@ export default () => {
             <View className="flex-1">
               <H3 className="3xl">Weight</H3>
               <View className="flex-row items-center justify-between gap-2">
-                <Text className="text-2xl text-foreground-dimmed">1000kg</Text>
+                <Text className="text-2xl text-foreground-dimmed">
+                  {data.weight}
+                </Text>
                 <EditIcon className="text-foreground-dimmed/50  size-6" />
               </View>
             </View>
@@ -66,7 +75,7 @@ export default () => {
             className="absolute self-center mb-6 w-full"
             style={{ bottom }}
           >
-            <Text>Continue</Text>
+            <H3 className={"text-white text-2xl font-normal"}>Continue</H3>
           </Button>
         </Link>
       </View>

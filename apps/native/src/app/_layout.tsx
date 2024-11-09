@@ -1,13 +1,15 @@
-import { useFonts } from "expo-font";
-import { useEffect } from "react";
+import {useFonts} from "expo-font";
+import {useEffect} from "react";
 
-import { Providers } from "@/components/providers/providers";
-import { Text } from "@zennui/native/text";
-import { Stack } from "expo-router";
+import {Providers} from "@/components/providers/providers";
+import {Text} from "@zennui/native/text";
+import {Stack} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import "@zenncore/config/tailwind/globals";
+import {LogBox} from "react-native";
 
 SplashScreen.preventAutoHideAsync();
+LogBox.ignoreAllLogs();
 
 export default () => {
   const [isLoaded, error] = useFonts({

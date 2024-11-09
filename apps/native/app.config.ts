@@ -2,8 +2,8 @@ import type {ConfigContext, ExpoConfig} from "expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "Junction",
-  slug: "junction",
+  name: "Alerium",
+  slug: "alerium",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",

@@ -1,70 +1,33 @@
-import { LinearGradient as CustomLinearGradient } from "@/components/general/linear-gradient";
-import { LayoutButton } from "@/components/home/layout-button";
-import { api } from "@junction/provider/convex/_generated/api";
-import { BellIcon, BuildingIcon, InfoIcon, SettingsIcon } from "@zennui/icons";
-import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@zennui/native/carousel";
-import { Text } from "@zennui/native/text";
-import { H1, H3 } from "@zennui/native/typography";
-import { useQuery } from "convex/react";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
-import { cssInterop } from "nativewind";
+import {LinearGradient as CustomLinearGradient} from "@/components/general/linear-gradient";
+import {LayoutButton} from "@/components/home/layout-button";
+import {BellIcon, BuildingIcon, InfoIcon, SettingsIcon} from "@zennui/icons";
+import {Button} from "@zennui/native/button";
+import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
+import {Text} from "@zennui/native/text";
+import {H1, H3} from "@zennui/native/typography";
+import {Image} from "expo-image";
+import {LinearGradient} from "expo-linear-gradient";
+import {cssInterop} from "nativewind";
+import {Pressable, StyleSheet, View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import {SafeAreaView} from "react-native-safe-area-context";
+
+import {Link} from "expo-router";
+import {useQuery} from "convex/react";
+import {api} from "@junction/provider/convex/_generated/api";
 import OpenAI from "openai";
-import { Pressable, StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {format, isToday, isYesterday} from "date-fns";
 
 cssInterop(LinearGradient, { className: "style" });
 
-const client = new OpenAI({
-  apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
-  organization: process.env.EXPO_PUBLIC_OPENAI_ORGANIZATION_ID,
-});
 
 export default () => {
   const surveys = useQuery(api.services.survey.getAllSurveys, {});
 
-  const askChat = async (content: NonNullable<typeof surveys>[number]) => {
-    try {
-      const completion = await client.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          {
-            role: "user",
-            content: `Summarize: ${JSON.stringify(content)}`,
-          },
-        ],
-      });
 
-      const responseText = completion.choices[0]?.message.content;
-      console.log("Full response:", responseText);
-    } catch (error) {
-      console.error("Error in askChat:", error);
-      throw error;
-    }
-  };
 
   return (
     <>
-      <Pressable
-        onPress={() => {
-          if (surveys?.[0] && surveys.length > 0) {
-            askChat(surveys[0]);
-          } else {
-            console.log("No survey data available");
-          }
-        }}
-        className="absolute top-36 z-50 right-8"
-      >
-        <InfoIcon className="size-8 text-primary" />
-      </Pressable>
       <ScrollView contentContainerClassName="pb-16">
         <Image
           source={require("@assets/images/radial-gradient.png")}
@@ -139,7 +102,7 @@ export default () => {
               <View className="gap-3">
                 {surveys?.map(({ _id, name, _creationTime }) => (
                   <Link
-                    href={`/survey/${encodeURIComponent(name)}`}
+                    href={`/survey/${encodeURIComponent(_id)}`}
                     key={_id}
                     asChild
                   >
@@ -150,7 +113,7 @@ export default () => {
                           {name}
                         </Text>
                         <Text className="border-red-500 border-b text-foreground-dimmed text-sm">
-                          {_creationTime}
+                          {formatDateString(_creationTime)}
                         </Text>
                       </View>
                     </Pressable>
@@ -199,59 +162,12 @@ const EQUIPMENT_CATEGORIES = [
   },
 ];
 
-const RECENT_SURVEYS = [
-  {
-    id: "1",
-    title: "Lidl Helsinki 2",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "2",
-    title: "Helsinki Mall",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "3",
-    title: "Vaanta Airport",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "134623456",
-    title: "Lidl Helsinki 2",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "234214214",
-    title: "Helsinki Mall",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "323123123",
-    title: "Vaanta Airport",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "12331",
-    title: "Lidl Helsinki 2",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "23123",
-    title: "Helsinki Mall",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-  {
-    id: "213",
-    title: "Vaanta Airport",
-    date: "Yesterday",
-    Icon: BuildingIcon,
-  },
-];
+const formatDateString = (date: string | number | Date) => {
+  const wasYesterday = isYesterday(date);
+  const isThisDay = isToday(date);
+  return wasYesterday
+    ? "Yesterday"
+    : isThisDay
+      ? "Today"
+      : format(date, "dd MMM yyyy");
+};
