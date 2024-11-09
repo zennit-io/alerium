@@ -1,10 +1,9 @@
-import { authTables } from "@convex-dev/auth/server";
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import {authTables} from "@convex-dev/auth/server";
+import {defineSchema, defineTable} from "convex/server";
+import {v} from "convex/values";
 
 export default defineSchema({
   ...authTables,
-
   reports: defineTable({
     survey: v.id("surveys"),
     serialNumber: v.optional(v.string()),
@@ -26,9 +25,8 @@ export default defineSchema({
     ),
     otherMetaData: v.optional(v.any()),
   }).index("by_serialNumber", ["serialNumber"]),
-
   surveys: defineTable({
-    name: v.optional(v.string()),
+    name: v.string(),
     location: v.optional(
       v.object({
         address: v.optional(v.string()),

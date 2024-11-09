@@ -4,13 +4,8 @@
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
-    "lint": "biome check --fix --unsafe",
-    "dev": "expo start -c --ios",
-    "dev:web": "expo start -c --web",
-    "dev:android": "expo start -c --android",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start -c --web"
+    "dev": "convex dev",
+    "setup": "convex dev --until-success"
   },
   "dependencies": {
     "convex": "^1.17.0"

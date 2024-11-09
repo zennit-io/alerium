@@ -1,22 +1,19 @@
-import { LinearGradient as CustomLinearGradient } from "@/components/general/linear-gradient";
-import { LayoutButton } from "@/components/home/layout-button";
-import { BellIcon, BuildingIcon, InfoIcon, SettingsIcon } from "@zennui/icons";
-import { Button } from "@zennui/native/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@zennui/native/carousel";
-import { Text } from "@zennui/native/text";
-import { H1, H3 } from "@zennui/native/typography";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
-import { cssInterop } from "nativewind";
+import {LinearGradient as CustomLinearGradient} from "@/components/general/linear-gradient";
+import {LayoutButton} from "@/components/home/layout-button";
+import {BellIcon, BuildingIcon, SettingsIcon} from "@zennui/icons";
+import {Button} from "@zennui/native/button";
+import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
+import {Text} from "@zennui/native/text";
+import {H1, H3} from "@zennui/native/typography";
+import {Image} from "expo-image";
+import {LinearGradient} from "expo-linear-gradient";
+import {cssInterop} from "nativewind";
+import {Pressable, StyleSheet, View} from "react-native";
+import {ScrollView} from "react-native-gesture-handler";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {Link} from "expo-router";
+import {useQuery} from "convex/react";
 import OpenAI from "openai";
-import { Pressable, StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 cssInterop(LinearGradient, { className: "style" });
 
@@ -48,6 +45,8 @@ export default () => {
     }
   };
 
+  const surveys = useQuery(api.services.survey.getAllSurveys, {});
+console.log(surveys);
   return (
     <>
       <Pressable
@@ -128,20 +127,20 @@ export default () => {
                 Recent Surveys
               </H3>
               <View className="gap-3">
-                {RECENT_SURVEYS.map(({ id, title, date, Icon }) => (
+                {surveys?.map(({ _id, name, _creationTime }) => (
                   <Link
-                    href={`/survey/${encodeURIComponent(title)}`}
-                    key={id}
+                    href={`/survey/${encodeURIComponent(name)}`}
+                    key={_id}
                     asChild
                   >
                     <Pressable className="flex-row items-center gap-4 rounded-2xl px-6">
-                      <Icon className="size-9 text-primary" />
+                      <BuildingIcon className="size-9 text-primary" />
                       <View className="flex-1 border-border border-b pb-3">
                         <Text className="font-medium text-2xl text-foreground">
-                          {title}
+                          {name}
                         </Text>
                         <Text className="border-red-500 border-b text-foreground-dimmed text-sm">
-                          {date}
+                          {_creationTime}
                         </Text>
                       </View>
                     </Pressable>
