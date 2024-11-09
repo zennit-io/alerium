@@ -28,7 +28,9 @@ const client = new OpenAI({
 });
 
 export default () => {
-  const askChat = async (content: string) => {
+  const surveys = useQuery(api.services.survey.getAllSurveys, {});
+
+  const askChat = async (content: NonNullable<typeof surveys>[number]) => {
     try {
       const completion = await client.chat.completions.create({
         model: "gpt-4o-mini",
@@ -36,10 +38,9 @@ export default () => {
           { role: "system", content: "You are a helpful assistant." },
           {
             role: "user",
-            content,
+            content: `Summarize: ${JSON.stringify(content)}`,
           },
         ],
-        // stream: true,
       });
 
       const responseText = completion.choices[0]?.message.content;
@@ -50,11 +51,16 @@ export default () => {
     }
   };
 
-  const surveys = useQuery(api.services.survey.getAllSurveys, {});
   return (
     <>
       <Pressable
-        onPress={() => askChat("Say this is a test")}
+        onPress={() => {
+          if (surveys?.[0] && surveys.length > 0) {
+            askChat(surveys[0]);
+          } else {
+            console.log("No survey data available");
+          }
+        }}
         className="absolute top-36 z-50 right-8"
       >
         <InfoIcon className="size-8 text-primary" />
