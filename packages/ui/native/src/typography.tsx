@@ -1,14 +1,19 @@
 import * as Slot from "@rn-primitives/slot";
-import type { SlottableTextProps, TextRef } from "@rn-primitives/types";
-import { cn } from "@zenncore/utils";
-import type { Ref } from "react";
-import { Platform, Text as RNText } from "react-native";
+import type {SlottableTextProps, TextRef} from "@rn-primitives/types";
+import {cn} from "@zenncore/utils";
+import type {Ref} from "react";
+import {Text as RNText} from "react-native";
 
 export type H1Props = {
   ref?: Ref<TextRef>;
 } & SlottableTextProps;
 
-export const H1 = ({ className, asChild = false, ...props }: H1Props) => {
+export const H1 = ({
+  className,
+  asChild = false,
+  style,
+  ...props
+}: H1Props) => {
   const Component = asChild ? Slot.Text : RNText;
 
   return (
@@ -20,6 +25,12 @@ export const H1 = ({ className, asChild = false, ...props }: H1Props) => {
         "font-extrabold text-4xl text-foreground tracking-tight lg:text-5xl",
         className,
       )}
+      style={[
+        {
+          fontFamily: "RFDewiExtended-Bold",
+        },
+        style,
+      ]}
       {...props}
     />
   );

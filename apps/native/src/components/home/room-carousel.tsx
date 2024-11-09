@@ -7,10 +7,10 @@ import {
 } from "@zennui/native/carousel";
 import { cssInterop } from "nativewind";
 import {
-  useWindowDimensions,
-  View,
   Image,
   type ImageSourcePropType,
+  View,
+  useWindowDimensions,
 } from "react-native";
 import { Extrapolation, interpolate } from "react-native-reanimated";
 
@@ -33,7 +33,7 @@ const ROOMS = [
 
 export const RoomCarousel = () => {
   return (
-    <View className={"w-full h-96 gap-2 items-center"}>
+    <View className={"h-96 w-full items-center gap-2"}>
       <Carousel itemCount={ROOMS.length}>
         <CarouselContent align={"center"}>
           {ROOMS.map((room, index) => (
@@ -63,7 +63,7 @@ const RoomCarouselItem = ({ index, image, name }: RoomCarouselItemProps) => {
       }}
       animate={animate}
     >
-      <Image source={image} className={"w-full h-64 rounded-2xl"} />
+      <Image source={image} className={"h-64 w-full rounded-2xl"} />
     </CarouselItem>
   );
 };

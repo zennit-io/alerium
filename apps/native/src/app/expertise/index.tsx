@@ -1,28 +1,26 @@
-import { Header } from "@/components/general/header";
-import { MicIcon, XIcon } from "@zennui/icons";
-import { Button } from "@zennui/native/button";
-import { Text } from "@zennui/native/text";
-import { Link } from "expo-router";
-import {
-  ExpoSpeechRecognitionModule,
-  useSpeechRecognitionEvent,
-} from "expo-speech-recognition";
-import { useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
+import {Header} from "@/components/general/header";
+import {MicIcon, XIcon} from "@zennui/icons";
+import {Button} from "@zennui/native/button";
+import {Text} from "@zennui/native/text";
+import {Link} from "expo-router";
+import {ExpoSpeechRecognitionModule, useSpeechRecognitionEvent,} from "expo-speech-recognition";
+import {useEffect, useState} from "react";
+import {Pressable, View} from "react-native";
 import Animated, {
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
+    interpolate,
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withTiming,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {useScannedInfo} from "@/components/providers/scanned-info";
 
 export default () => {
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const size = useSharedValue(60);
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState("");
+  const [output, setOutput] = useScannedInfo();
 
   useSpeechRecognitionEvent("start", () => setIsListening(true));
   useSpeechRecognitionEvent("end", () => setIsListening(false));
@@ -31,7 +29,10 @@ export default () => {
     console.log("transcript:", content);
 
     if (!content) return;
-    setTranscript(content);
+    setOutput((previousState) => ({
+      ...previousState,
+      voiceValue: content,
+    }));
   });
   useSpeechRecognitionEvent("error", (event) => {
     console.log("error code:", event.error, "error messsage:", event.message);
@@ -50,11 +51,12 @@ export default () => {
       maxAlternatives: 1,
       continuous: false,
       requiresOnDeviceRecognition: false,
-      addsPunctuation: false,
-      contextualStrings: ["Carlsen", "Nepomniachtchi", "Praggnanandhaa"],
+      addsPunctuation: true,
+      contextualStrings: ["AI", "Kone", "Grunlund"],
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: size is a stable value
   useEffect(() => {
     size.value = withRepeat(withTiming(90, { duration: 1000 }), -1);
   }, []);
@@ -83,17 +85,23 @@ export default () => {
           paddingTop: top + 60,
         }}
       >
-        <Text className="text-2xl font-medium">The elevator is good</Text>
-        <View className="gap-8 flex-1 pb-36">
+        <Text className="text-2xl font-medium">
+          {output?.voiceValue ?? "No Expertise..."}
+        </Text>
+        <View className="gap-8 flex-1 mb-32" style={{ bottom }}>
           <View className="items-center justify-center mt-auto">
-            <Animated.View
-              style={animatedStyle}
-              className="absolute bg-primary/10 rounded-full"
-            />
-            <Animated.View
-              style={animatedStyle2}
-              className="bg-primary/20 absolute rounded-full"
-            />
+            {isListening && (
+              <>
+                <Animated.View
+                  style={animatedStyle}
+                  className="absolute bg-primary/10 rounded-full"
+                />
+                <Animated.View
+                  style={animatedStyle2}
+                  className="bg-primary/20 absolute rounded-full"
+                />
+              </>
+            )}
             {/* <Pressable
               onPress={() => {
                 setIsListening(!isListening);
@@ -132,7 +140,8 @@ export default () => {
         <Link href={"/details"} asChild>
           <Button
             color={"primary"}
-            className="absolute self-center bottom-6 w-full"
+            className="absolute self-center mb-24 w-full"
+            style={{ bottom }}
           >
             <Text>Continue</Text>
           </Button>

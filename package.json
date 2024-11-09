@@ -52,6 +52,7 @@
     "turbo": "^2.1.3",
     "typescript": "^5.4.5"
   },
+  "packageManager": "bun@1.0.0",
   "workspaces": ["apps/*", "packages/shared/*", "packages/ui/*", "packages/*"],
   "version": "1.0.0"
 }

@@ -1,52 +1,34 @@
-import { useControllableState } from "@zenncore/hooks";
-import type { ClassList, UniqueIdentifier } from "@zenncore/types";
-import type { Tuple } from "@zenncore/types/utilities";
-import { cn } from "@zenncore/utils";
-import { useFocusEffect } from "expo-router";
+import {useControllableState} from "@zenncore/hooks";
+import type {ClassList, UniqueIdentifier} from "@zenncore/types";
+import type {Tuple} from "@zenncore/types/utilities";
+import {cn} from "@zenncore/utils";
+import {useFocusEffect} from "expo-router";
 import {
-  type Dispatch,
-  type PropsWithChildren,
-  type Ref,
-  type SetStateAction,
-  createContext,
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useId,
-  useState,
+    createContext,
+    type Dispatch,
+    forwardRef,
+    type PropsWithChildren,
+    type Ref,
+    type SetStateAction,
+    useCallback,
+    useContext,
+    useId,
+    useState,
 } from "react";
-import {
-  type GestureResponderEvent,
-  Pressable,
-  View,
-  useWindowDimensions,
-} from "react-native";
-import { GestureDetector, type PanGesture } from "react-native-gesture-handler";
+import {type GestureResponderEvent, Pressable, useWindowDimensions, View,} from "react-native";
+import {GestureDetector, type PanGesture} from "react-native-gesture-handler";
 import Animated, {
-  Extrapolation,
-  interpolate,
-  runOnJS,
-  useAnimatedReaction,
-  useAnimatedStyle,
+    Extrapolation,
+    interpolate,
+    runOnJS,
+    useAnimatedReaction,
+    useAnimatedStyle,
 } from "react-native-reanimated";
-import { Portal } from "../portal";
-import {
-  Pressable as PressableSlot,
-  type ViewProps as SlottableViewProps,
-} from "../slot";
-import type {
-  ForceMountable,
-  PressableRef,
-  SlottablePressableProps,
-} from "../types";
-import {
-  type SnapPoint,
-  type UseDrawerReturn,
-  normalizeSnapPoint,
-  useDrawer,
-} from "./_hooks/use-drawer";
-import { useDrawerRootContext } from "./providers/drawer-root-provider";
+import {Portal} from "../portal";
+import {Pressable as PressableSlot, type ViewProps as SlottableViewProps,} from "../slot";
+import type {ForceMountable, PressableRef, SlottablePressableProps,} from "../types";
+import {normalizeSnapPoint, type SnapPoint, useDrawer, type UseDrawerReturn,} from "./_hooks/use-drawer";
+import {useDrawerRootContext} from "./providers/drawer-root-provider"; // todo: add drawer classList,disabled
 
 // todo: add drawer classList,disabled
 
@@ -200,6 +182,7 @@ export const Drawer = ({
     const snapPoint = open
       ? instance.normalizedSnapPoints[0]
       : instance.normalizedSnapPoints[1];
+
     instance.snapTo(snapPoint);
     onOpenChange?.(open);
   };

@@ -1,11 +1,11 @@
-import type { ClassList } from "@zenncore/types";
-import { cn } from "@zenncore/utils";
-import { ChevronLeftIcon } from "@zennui/icons";
-import { H1 } from "@zennui/native/typography";
-import { useRouter } from "expo-router";
-import { Pressable, View, type ViewProps } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { LinearGradient } from "./linear-gradient";
+import type {ClassList} from "@zenncore/types";
+import {cn} from "@zenncore/utils";
+import {ChevronLeftIcon} from "@zennui/icons";
+import {H1, P} from "@zennui/native/typography";
+import {useRouter} from "expo-router";
+import {Pressable, View, type ViewProps} from "react-native";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {LinearGradient} from "./linear-gradient";
 
 type HeaderClassListKey = "root" | { button: "icon" } | "title";
 
@@ -20,6 +20,7 @@ export type HeaderProps = {
   };
   locations?: number[];
   variant?: "primary" | "default";
+  subtitle?: string;
 } & ViewProps;
 
 export const Header = ({
@@ -31,13 +32,14 @@ export const Header = ({
   locations = [0.2, 1],
   style,
   variant,
+  subtitle,
   ...props
 }: HeaderProps) => {
   const router = useRouter();
   const { top } = useSafeAreaInsets();
 
   return (
-    <View className={"absolute z-10 w-full"}>
+    <View className={"absolute z-[1000] w-full flex flex-col"}>
       <LinearGradient
         locations={locations}
         variant={variant}
@@ -45,7 +47,6 @@ export const Header = ({
         inverted={false}
         className="absolute top-0 h-36 w-full"
       />
-
       <View
         className={cn(
           "flex h-12 flex-row items-center gap-2 px-4",
@@ -80,6 +81,11 @@ export const Header = ({
           {title}
         </H1>
       </View>
+      {subtitle && (
+        <P className={"text-foreground-dimmed ml-[50px] text-xl"} style={{ top }}>
+          {subtitle}
+        </P>
+      )}
     </View>
   );
 };
