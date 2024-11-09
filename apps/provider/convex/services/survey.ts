@@ -1,12 +1,10 @@
-import { v } from "convex/values";
-import { mutation, query } from "../_generated/server";
-import { getUser } from "./_utils/user";
-import { getReportsOfSurvey } from "./report";
+import {v} from "convex/values";
+import {mutation, query} from "../_generated/server";
+import {getReportsOfSurvey} from "./report";
 
 export const getAllSurveys = query({
   args: {},
   handler: async (ctx) => {
-    await getUser(ctx);
     return ctx.db.query("surveys").collect();
   },
 });
@@ -16,7 +14,6 @@ export const getSurveyById = query({
     id: v.id("surveys"),
   },
   handler: async (ctx, { id }) => {
-    await getUser(ctx);
     const survey = await ctx.db
       .query("surveys")
       .filter((q) => q.eq(q.field("_id"), id))
@@ -41,7 +38,6 @@ export const saveSurvey = mutation({
     }),
   },
   handler: async (ctx, args) => {
-    await getUser(ctx);
     return await ctx.db.insert("surveys", args);
   },
 });
@@ -59,7 +55,6 @@ export const updateSurvey = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    await getUser(ctx);
     return await ctx.db.patch(args.id, args);
   },
 });
@@ -69,7 +64,6 @@ export const deleteSurvey = mutation({
     id: v.id("surveys"),
   },
   handler: async (ctx, { id }) => {
-    await getUser(ctx);
     return await ctx.db.delete(id);
   },
 });
