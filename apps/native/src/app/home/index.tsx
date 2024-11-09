@@ -143,8 +143,8 @@ const EQUIPMENT_CATEGORIES = [
   },
   {
     id: "3",
-    title: "Elevators",
-    image: require("@assets/images/equipment-category-1.png"),
+    title: "E-Doors",
+    image: require("@assets/images/equipment-category-3.png"),
   },
 ];
 

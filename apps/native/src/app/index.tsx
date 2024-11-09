@@ -1,7 +1,12 @@
 import { LinearGradient } from "@/components/general/linear-gradient";
 import { LayoutButton } from "@/components/home/layout-button";
 import { Button } from "@zennui/native/button";
-import { CarouselItem } from "@zennui/native/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselIndicator,
+  CarouselItem,
+} from "@zennui/native/carousel";
 import { Text } from "@zennui/native/text";
 import { H1, H3 } from "@zennui/native/typography";
 import { Image } from "expo-image";
@@ -26,21 +31,18 @@ cssInterop(SafeAreaView, { className: "style" });
 cssInterop(LinearGradient, { className: "style" });
 
 const ONBOARD_SECTIONS = [
-  // {
-  //   image: require("@assets/images/onboard-1.png"),
-  //   title: "fast-easy-parking",
-  //   description: "fast-easy-parking-description",
-  // },
-  // {
-  //   image: require("@assets/images/onboard-2.png"),
-  //   title: "security-priority",
-  //   description: "security-priority-description",
-  // },
-  // {
-  //   image: require("@assets/images/onboard-3.png"),
-  //   title: "lookup-coins",
-  //   description: "lookup-coins-description",
-  // },
+  {
+    image: require("@assets/images/onboard-1.png"),
+    title: "Scan & Register Data",
+    description:
+      "Granlund & KONe App helps you register data fast by using enhanced AI",
+  },
+  {
+    image: require("@assets/images/onboard-2.png"),
+    title: "Keep track of maintanance",
+    description:
+      "Granlund & KONe App helps you register data fast by using enhanced AI",
+  },
 ];
 
 export default () => {
@@ -48,10 +50,9 @@ export default () => {
 
   return (
     <>
-      <Redirect href={"/home"} />
       <View className="z-10 flex-1">
         <View className="gap-4">
-          {/* <Carousel
+          <Carousel
             defaultActiveItem={2}
             itemCount={ONBOARD_SECTIONS.length}
             loop
@@ -63,14 +64,7 @@ export default () => {
               ))}
             </CarouselContent>
             <CarouselIndicator growthIndex={5} />
-          </Carousel> */}
-          {/* <TimePicker
-            className="-top-32"
-            value={{
-              hour: new Date().getHours(),
-            }}
-            minDisabled
-          /> */}
+          </Carousel>
         </View>
         <View
           className={"mt-auto gap-6 px-6"}
@@ -106,7 +100,6 @@ export default () => {
           </Link>
         </View>
 
-        {/*<RoomCarousel />*/}
         <H3 className={"font-header font-normal text-3xl px-6"}>Maintenance</H3>
         <LayoutButton />
       </View>
