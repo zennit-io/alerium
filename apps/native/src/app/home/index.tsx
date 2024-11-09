@@ -1,19 +1,24 @@
-import {LinearGradient as CustomLinearGradient} from "@/components/general/linear-gradient";
-import {LayoutButton} from "@/components/home/layout-button";
-import {BellIcon, BuildingIcon, SettingsIcon} from "@zennui/icons";
-import {Button} from "@zennui/native/button";
-import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
-import {Text} from "@zennui/native/text";
-import {H1, H3} from "@zennui/native/typography";
-import {Image} from "expo-image";
-import {LinearGradient} from "expo-linear-gradient";
-import {cssInterop} from "nativewind";
-import {Pressable, StyleSheet, View} from "react-native";
-import {ScrollView} from "react-native-gesture-handler";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {Link} from "expo-router";
-import {useQuery} from "convex/react";
+import { LinearGradient as CustomLinearGradient } from "@/components/general/linear-gradient";
+import { LayoutButton } from "@/components/home/layout-button";
+import { api } from "@junction/provider/convex/_generated/api";
+import { BellIcon, BuildingIcon, InfoIcon, SettingsIcon } from "@zennui/icons";
+import { Button } from "@zennui/native/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@zennui/native/carousel";
+import { Text } from "@zennui/native/text";
+import { H1, H3 } from "@zennui/native/typography";
+import { useQuery } from "convex/react";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { cssInterop } from "nativewind";
 import OpenAI from "openai";
+import { Pressable, StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 cssInterop(LinearGradient, { className: "style" });
 
@@ -46,12 +51,11 @@ export default () => {
   };
 
   const surveys = useQuery(api.services.survey.getAllSurveys, {});
-console.log(surveys);
   return (
     <>
       <Pressable
         onPress={() => askChat("Say this is a test")}
-        className="absolute top-20 z-50 right-6"
+        className="absolute top-36 z-50 right-8"
       >
         <InfoIcon className="size-8 text-primary" />
       </Pressable>
