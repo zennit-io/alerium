@@ -5,6 +5,7 @@ import { FormSubmitButton, InferredForm, field } from "@zennui/native/form";
 import { Text } from "@zennui/native/text";
 import { H1 } from "@zennui/native/typography";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { z } from "zod";
 
@@ -26,11 +27,12 @@ const config = {
 
 export default () => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <>
       <Header title="" />
-      <Drawer snapAt={"60%"} defaultOpen scaleBackground={false}>
+      <Drawer snapAt={"60%"} open={isOpen} scaleBackground={false}>
         <DrawerContent className="gap-8 px-6">
           <H1 className="text-primary text-center">Survey Location</H1>
           <InferredForm

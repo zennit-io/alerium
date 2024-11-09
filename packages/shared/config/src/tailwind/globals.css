@@ -22,11 +22,11 @@
     --background-rich: 360 0% 90%;
     /* primary shades */
     --primary-dimmed: 128 61% 21%;
-    --primary: 21, 100%, 50%;
+    --primary: 21 100% 50%;
     --primary-rich: 128 55% 57%;
     /* secondary shades */
-    --secondary-dimmed: 85.87 78.42% 27.25%;
-    --secondary: 84.8 85.23% 34.51%;
+    --secondary-dimmed: 21 100% 50%;
+    --secondary: 21 100% 50%;
     --secondary-rich: 82.71 77.97% 55.49%;
     /* destructive shades */
     --error-dimmed: 0 73.71% 41.76%;
@@ -54,7 +54,7 @@
     --neutral-rich: 199.09 9.09% 47.45%;
     --neutral-foreground: 207.27 25.58% 8.43%;
     /* extras */
-    --border: 220 10% 81%;
+    --border: 21, 100%, 50%;
     --input: 220 13% 91%;
     --ring: 128 52% 47%;
     --radius: 0.5rem;

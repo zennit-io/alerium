@@ -38,12 +38,12 @@ export const buttonVariants = cva(
       {
         variant: "default",
         color: "primary",
-        className: "border-primary-dimmed bg-primary",
+        className: "border-primary bg-primary",
       },
       {
         variant: "default",
         color: "secondary",
-        className: "border-secondary-dimmed bg-secondary",
+        className: "border- bg-secondary",
       },
       {
         variant: "default",
@@ -53,7 +53,7 @@ export const buttonVariants = cva(
       {
         variant: "default",
         color: "accent",
-        className: "border-accent-dimmed bg-accent",
+        className: "border-primary bg-accent",
       },
       {
         variant: "default",

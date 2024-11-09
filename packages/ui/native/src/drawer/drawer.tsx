@@ -175,7 +175,7 @@ export const Drawer = ({
   const instance = useDrawer({
     // 100% is closed, so 100% from the top of the screen, and 20% is pretty much open
     snapPoints,
-    startAt: defaultOpen ? snapPoints[0] : snapPoints[1],
+    startAt: openProp || defaultOpen ? snapPoints[0] : snapPoints[1],
   });
 
   const scale = useDrawerRootContext();

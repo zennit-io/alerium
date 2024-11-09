@@ -1,5 +1,4 @@
 import { LinearGradient } from "@/components/general/linear-gradient";
-import { LayoutButton } from "@/components/home/layout-button";
 import { Button } from "@zennui/native/button";
 import {
   Carousel,
@@ -10,7 +9,7 @@ import {
 import { Text } from "@zennui/native/text";
 import { H1, H3 } from "@zennui/native/typography";
 import { Image } from "expo-image";
-import { Link, Redirect } from "expo-router";
+import { Link } from "expo-router";
 import { cssInterop } from "nativewind";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
@@ -73,7 +72,7 @@ export default () => {
           <Link href={"/log-in"} asChild>
             <Button color={"primary"} variant={"soft"}>
               <Text
-                className={"font-header"}
+                className={"font-header text-foreground"}
                 style={{ fontFamily: "RFDewiExtended-Bold" }}
               >
                 Log in
@@ -101,10 +100,9 @@ export default () => {
         </View>
 
         <H3 className={"font-header font-normal text-3xl px-6"}>Maintenance</H3>
-        <LayoutButton />
       </View>
       <LinearGradient
-        colors={["rgba(57,181,74,0)", "rgba(57,181,74,0.6)"]}
+        colors={["rgba(255,89,0,0)", "rgba(255,89,0,0.6)"]}
         className="absolute bottom-0 h-40 w-full"
       />
     </>
