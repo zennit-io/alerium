@@ -51,7 +51,7 @@ export default () => {
     <>
       <View className="z-10 flex-1">
         <View className="gap-4">
-          <Carousel
+          {/* <Carousel
             defaultActiveItem={2}
             itemCount={ONBOARD_SECTIONS.length}
             loop
@@ -63,13 +63,13 @@ export default () => {
               ))}
             </CarouselContent>
             <CarouselIndicator growthIndex={5} />
-          </Carousel>
+          </Carousel> */}
         </View>
         <View
           className={"mt-auto gap-6 px-6"}
           style={{ paddingBottom: bottom + 20 }}
         >
-          <Link href={"/log-in"} asChild>
+          <Link href={"/sign-in"} asChild>
             <Button color={"primary"} variant={"soft"}>
               <Text
                 className={"font-header text-foreground"}

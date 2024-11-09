@@ -1,14 +1,15 @@
 import { Header } from "@/components/general/header";
-import { EditIcon, MapIcon, MicIcon } from "@zennui/icons";
+import { MicIcon, XIcon } from "@zennui/icons";
 import { Button } from "@zennui/native/button";
-import { field } from "@zennui/native/form";
 import { Text } from "@zennui/native/text";
-import { H3 } from "@zennui/native/typography";
 import { Link } from "expo-router";
-import { useEffect } from "react";
-import { View } from "react-native";
+import {
+  ExpoSpeechRecognitionModule,
+  useSpeechRecognitionEvent,
+} from "expo-speech-recognition";
+import { useEffect, useState } from "react";
+import { Pressable, View } from "react-native";
 import Animated, {
-  Easing,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
@@ -16,28 +17,43 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { z } from "zod";
-
-const config = {
-  name: field({
-    shape: "text",
-    constraint: z.string().min(1),
-    label: "Name Building",
-    placeholder: "e.g Kone Building No.9",
-    classList: {
-      root: "gap-0",
-      label: "text-2xl",
-      input: {
-        root: "border-0 gap-0",
-        input: "placeholder:text-foreground-dimmed/50 text-xl h-auto",
-      },
-    },
-  }),
-};
 
 export default () => {
   const { top } = useSafeAreaInsets();
   const size = useSharedValue(60);
+  const [isListening, setIsListening] = useState(false);
+  const [transcript, setTranscript] = useState("");
+
+  useSpeechRecognitionEvent("start", () => setIsListening(true));
+  useSpeechRecognitionEvent("end", () => setIsListening(false));
+  useSpeechRecognitionEvent("result", (event) => {
+    const content = event.results[0]?.transcript;
+    console.log("transcript:", content);
+
+    if (!content) return;
+    setTranscript(content);
+  });
+  useSpeechRecognitionEvent("error", (event) => {
+    console.log("error code:", event.error, "error messsage:", event.message);
+  });
+
+  const handleStart = async () => {
+    const result = await ExpoSpeechRecognitionModule.requestPermissionsAsync();
+    if (!result.granted) {
+      console.warn("Permissions not granted", result);
+      return;
+    }
+    // Start speech recognition
+    ExpoSpeechRecognitionModule.start({
+      lang: "en-US",
+      interimResults: true,
+      maxAlternatives: 1,
+      continuous: false,
+      requiresOnDeviceRecognition: false,
+      addsPunctuation: false,
+      contextualStrings: ["Carlsen", "Nepomniachtchi", "Praggnanandhaa"],
+    });
+  };
 
   useEffect(() => {
     size.value = withRepeat(withTiming(90, { duration: 1000 }), -1);
@@ -78,9 +94,39 @@ export default () => {
               style={animatedStyle2}
               className="bg-primary/20 absolute rounded-full"
             />
-            <View className="bg-primary/40 p-3 rounded-full border-primary/50 border">
-              <MicIcon className="text-primary size-10" />
-            </View>
+            {/* <Pressable
+              onPress={() => {
+                setIsListening(!isListening);
+              }}
+              className="bg-primary/40 p-3 rounded-full border-primary/50 border"
+            >
+              {isListening ? (
+                <XIcon className="text-primary size-10" />
+              ) : (
+                <MicIcon className="text-primary size-10" />
+              )}
+            </Pressable> */}
+            {isListening ? (
+              <Pressable
+                onPress={() => {
+                  ExpoSpeechRecognitionModule.stop();
+                  setIsListening(!isListening);
+                }}
+                className="bg-primary/40 p-3 rounded-full border-primary/50 border"
+              >
+                <XIcon className="text-primary size-10" />
+              </Pressable>
+            ) : (
+              <Pressable
+                onPress={() => {
+                  handleStart();
+                  setIsListening(!isListening);
+                }}
+                className="bg-primary/40 p-3 rounded-full border-primary/50 border"
+              >
+                <MicIcon className="text-primary size-10" />
+              </Pressable>
+            )}
           </View>
         </View>
         <Link href={"/details"} asChild>

@@ -36,6 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "expo-router",
+    "expo-speech-recognition",
     [
       "react-native-vision-camera",
       {

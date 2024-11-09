@@ -8,7 +8,6 @@ import {
 import { Text } from "@zennui/native/text";
 import { useRouter } from "expo-router";
 import type { SubmitHandler } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import {
@@ -17,56 +16,53 @@ import {
 } from "react-native-safe-area-context";
 import { z } from "zod";
 
-const getSignInFormConfig = (t: ReturnType<typeof useTranslation>["t"]) => {
-  const config = {
-    email: field({
-      shape: "text",
-      constraint: z
-        .string({ required_error: t("email.required") })
-        .email(t("email.invalid")),
-      type: "email",
-      label: t("email.label"),
-      placeholder: t("email.placeholder"),
-      className: "rounded-none border-0 px-0 text-2xl text-foreground",
-      classList: {
-        label: "text-3xl",
-        message: "text-lg",
-        input: {
-          input: "text-2xl placeholder:text-foreground-dimmed/40",
-        },
+const config = {
+  email: field({
+    shape: "text",
+    constraint: z
+      .string({ required_error: "Email is required" })
+      .email("Enter a valid email"),
+    type: "email",
+    label: "Write your email",
+    placeholder: "Email",
+    className: "rounded-none border-0 px-0 text-2xl text-foreground",
+    classList: {
+      label: "text-3xl",
+      message: "text-lg",
+      input: {
+        input: "text-2xl placeholder:text-foreground-dimmed/40",
       },
-    }),
-    password: field({
-      shape: "text",
-      constraint: z
-        .string({ required_error: t("password.required") })
-        .min(8, t("password.short")),
-      placeholder: t("password.placeholder"),
-      label: t("password.label"),
-      type: "password",
-      className: "rounded-none border-0 px-0 text-2xl text-foreground",
-      classList: {
-        label: "text-3xl",
-        message: "text-lg",
-        input: {
-          input: "text-2xl placeholder:text-foreground-dimmed/40",
-          passwordDecorator: "size-6",
-        },
+    },
+  }),
+  password: field({
+    shape: "text",
+    constraint: z
+      .string({ required_error: "Password is required" })
+      .min(8, "Password must be at least 8 characters"),
+    placeholder: "Password",
+    label: "Write your password",
+    type: "password",
+    className: "rounded-none border-0 px-0 text-2xl text-foreground",
+    classList: {
+      label: "text-3xl",
+      message: "text-lg",
+      input: {
+        input: "text-2xl placeholder:text-foreground-dimmed/40",
+        passwordDecorator: "size-6",
       },
-    }),
-  } satisfies FormConfig;
-
-  return config;
-};
+    },
+  }),
+} satisfies FormConfig;
 
 export default () => {
-  const { t } = useTranslation("", { keyPrefix: "sign-in" });
   const { top } = useSafeAreaInsets();
-  const config = getSignInFormConfig(t);
+  const router = useRouter();
 
   const handleFormSubmit: SubmitHandler<
     InferredFormFields<typeof config>
-  > = async (data) => {};
+  > = async (data) => {
+    router.push("/home");
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: top }}>
@@ -82,7 +78,7 @@ export default () => {
             onSubmit={(data) => handleFormSubmit(data)}
           >
             <FormSubmitButton className="w-full">
-              <Text className="text-2xl">{t("sign-in")}</Text>
+              <Text className="text-2xl">Log in</Text>
             </FormSubmitButton>
           </InferredForm>
           <View className="my-4 flex-row items-center gap-4">

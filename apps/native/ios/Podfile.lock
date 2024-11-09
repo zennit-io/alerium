@@ -60,6 +60,8 @@ PODS:
     - Yoga
   - ExpoSecureStore (13.0.2):
     - ExpoModulesCore
+  - ExpoSpeechRecognition (0.2.24):
+    - ExpoModulesCore
   - ExpoSystemUI (3.0.7):
     - ExpoModulesCore
   - EXSplashScreen (0.27.6):
@@ -1474,6 +1476,7 @@ DEPENDENCIES:
   - ExpoLocalization (from `../../../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../../../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../../../node_modules/expo-secure-store/ios`)
+  - ExpoSpeechRecognition (from `../../../node_modules/expo-speech-recognition/ios`)
   - ExpoSystemUI (from `../../../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../../../node_modules/expo-splash-screen/ios`)
   - EXTaskManager (from `../../../node_modules/expo-task-manager/ios`)
@@ -1594,6 +1597,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-modules-core"
   ExpoSecureStore:
     :path: "../../../node_modules/expo-secure-store/ios"
+  ExpoSpeechRecognition:
+    :path: "../../../node_modules/expo-speech-recognition/ios"
   ExpoSystemUI:
     :path: "../../../node_modules/expo-system-ui/ios"
   EXSplashScreen:
@@ -1751,6 +1756,7 @@ SPEC CHECKSUMS:
   ExpoLocalization: f04eeec2e35bed01ab61c72ee1768ec04d093d01
   ExpoModulesCore: 831ece8311a489418746925820bbffdda587d6f4
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
+  ExpoSpeechRecognition: 36a901ca53815b795f2d3faeefed83135784827f
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   EXSplashScreen: 17a656c08a0095be15b620c52e61dfdb665863d2
   EXTaskManager: 9c3520305c3aa1b4a12a7c6d1e3f85f2779c06e9

@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 
 export const LayoutButton = () => {
   return (
-    <Link asChild href={"/new-entry-temp"}>
+    <Link asChild href={"/expertise"}>
       <Button
         className={
           "w-[90%] self-center z-10 mx-auto py-2 gap-3 flex-row items-center justify-center bg-primary absolute shadow-primary/40  bottom-6"
