@@ -1,24 +1,61 @@
-import {LinearGradient as CustomLinearGradient} from "@/components/general/linear-gradient";
-import {LayoutButton} from "@/components/home/layout-button";
-import {BellIcon, BuildingIcon, SettingsIcon} from "@zennui/icons";
-import {Button} from "@zennui/native/button";
-import {Carousel, CarouselContent, CarouselItem,} from "@zennui/native/carousel";
-import {Text} from "@zennui/native/text";
-import {H1, H3} from "@zennui/native/typography";
-import {Image} from "expo-image";
-import {LinearGradient} from "expo-linear-gradient";
-import {cssInterop} from "nativewind";
-import {Pressable, StyleSheet, View} from "react-native";
-import {ScrollView} from "react-native-gesture-handler";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {Link} from "expo-router";
+import { LinearGradient as CustomLinearGradient } from "@/components/general/linear-gradient";
+import { LayoutButton } from "@/components/home/layout-button";
+import { BellIcon, BuildingIcon, InfoIcon, SettingsIcon } from "@zennui/icons";
+import { Button } from "@zennui/native/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@zennui/native/carousel";
+import { Text } from "@zennui/native/text";
+import { H1, H3 } from "@zennui/native/typography";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { cssInterop } from "nativewind";
+import OpenAI from "openai";
+import { Pressable, StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 cssInterop(LinearGradient, { className: "style" });
 
+const client = new OpenAI({
+  apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
+  organization: process.env.EXPO_PUBLIC_OPENAI_ORGANIZATION_ID,
+});
+
 export default () => {
+  const askChat = async (content: string) => {
+    try {
+      const completion = await client.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          {
+            role: "user",
+            content,
+          },
+        ],
+        // stream: true,
+      });
+
+      const responseText = completion.choices[0]?.message.content;
+      console.log("Full response:", responseText);
+    } catch (error) {
+      console.error("Error in askChat:", error);
+      throw error;
+    }
+  };
 
   return (
     <>
+      <Pressable
+        onPress={() => askChat("Say this is a test")}
+        className="absolute top-20 z-50 right-6"
+      >
+        <InfoIcon className="size-8 text-primary" />
+      </Pressable>
       <ScrollView contentContainerClassName="pb-16">
         <Image
           source={require("@assets/images/radial-gradient.png")}

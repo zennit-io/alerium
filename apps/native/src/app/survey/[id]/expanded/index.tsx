@@ -1,15 +1,18 @@
-import {View} from "react-native";
-import {H3, P} from "@zennui/native/typography";
-import {Text} from "@zennui/native/text";
-import {EditIcon} from "@zennui/icons";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {Header} from "@/components/general/header";
+import { Header } from "@/components/general/header";
+import { EditIcon, InfoIcon } from "@zennui/icons";
+import { Text } from "@zennui/native/text";
+import { H3, P } from "@zennui/native/typography";
+import { Pressable, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default () => {
   const { top } = useSafeAreaInsets();
   return (
     <>
       <Header title="More Info" />
+      <Pressable className="absolute w-full bg-red-500 top-6 right-6">
+        <InfoIcon className="size-10 text-foreground-dimmed" />
+      </Pressable>
       <View
         className="flex-1 px-6 gap-8"
         style={{
