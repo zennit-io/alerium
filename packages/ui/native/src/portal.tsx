@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Platform, type View, type ViewStyle } from "react-native";
+import type { View, ViewStyle } from "react-native";
 import { create } from "zustand";
 
 const DEFAULT_PORTAL_HOST = "INTERNAL_PRIMITIVE_DEFAULT_HOST_NAME";
