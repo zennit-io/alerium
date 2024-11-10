@@ -50,6 +50,7 @@ EXPO_PUBLIC_CONVEX_URL=
 EXPO_PUBLIC_DYNAMOSOFT_KEY=
 EXPO_PUBLIC_OPENAI_API_KEY=
 EXPO_PUBLIC_OPENAI_ORGANIZATION_ID= 
+EXPO_PUBLIC_OPENAI_MODEL_ID=
 
 # Add your environment variables here
 ```
@@ -86,14 +87,14 @@ To run different parts of the application:
 bun run dev --filter provider
 
 # Run the mobile app
-bun run dev --filter mobile
+bun run dev --filter native
 ```
 
 ## 📱 Mobile App Setup
 
 1. Install mobile dependencies:
 ```bash
-cd apps/mobile
+cd apps/native
 bun install
 ```
 
@@ -128,4 +129,4 @@ This project was developed as part of the Junction hackathon. It showcases the i
 
 ---
 
-Built with ❤️ by the Alerium team for Junction
+Built with ❤️ by zennit for Junction
