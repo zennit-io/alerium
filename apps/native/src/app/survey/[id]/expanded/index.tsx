@@ -4,9 +4,20 @@ import {Text} from "@zennui/native/text";
 import {H3, P} from "@zennui/native/typography";
 import {View} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {useLocalSearchParams} from "expo-router";
+import {useQuery} from "convex/react";
+import {api} from "@junction/provider/convex/_generated/api";
+import type {Id} from "@junction/provider/convex/_generated/dataModel";
 
 export default () => {
   const { top } = useSafeAreaInsets();
+  const { report: reportId } = useLocalSearchParams<{ report: Id<"reports"> }>();
+  const report = useQuery(api.services.report.getReportById, {
+    id: reportId,
+  });
+
+  if (!report) return null;
+
   return (
     <>
       <Header title="More Info" />
@@ -22,16 +33,20 @@ export default () => {
         </P>
         <View className="flex-row gap-8 justify-between">
           <View className="flex-1">
-            <H3 className="3xl">Manifacture</H3>
+            <H3 className="3xl">Manufacturer</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">Kone</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.manufacturer}
+              </Text>
               <EditIcon className="text-foreground-dimmed/50  size-6" />
             </View>
           </View>
           <View className="flex-1">
             <H3 className="3xl">Scan ID</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">S67665834</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.serialNumber}
+              </Text>
               <EditIcon className="text-foreground-dimmed/50  size-6" />
             </View>
           </View>
@@ -40,14 +55,18 @@ export default () => {
           <View className="flex-1">
             <H3 className="3xl">Model</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">SpeedElev</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.model}
+              </Text>
               <EditIcon className="text-foreground-dimmed/50 size-6" />
             </View>
           </View>
           <View className="flex-1">
             <H3 className="3xl">Weight</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">1000kg</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.weight}KG
+              </Text>
               <EditIcon className="text-foreground-dimmed/50  size-6" />
             </View>
           </View>
@@ -57,7 +76,7 @@ export default () => {
             <H3 className="3xl">Serial #</H3>
             <View className="flex-row items-center justify-between gap-2">
               <Text className="text-2xl text-foreground-dimmed">
-                M3128978312
+                {report.serialNumber}
               </Text>
               <EditIcon className="text-foreground-dimmed/50 size-6" />
             </View>
@@ -66,7 +85,7 @@ export default () => {
             <H3 className="3xl">Dimensions</H3>
             <View className="flex-row items-center justify-between gap-2">
               <Text className="text-2xl text-foreground-dimmed">
-                20 x 20 x 20
+                {report.dimensions}
               </Text>
               <EditIcon className="text-foreground-dimmed/50  size-6" />
             </View>
@@ -76,14 +95,18 @@ export default () => {
           <View className="flex-1">
             <H3 className="3xl">Material</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">SpeedElev</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.material}
+              </Text>
               <EditIcon className="text-foreground-dimmed/50 size-6" />
             </View>
           </View>
           <View className="flex-1">
-            <H3 className="3xl">Weight</H3>
+            <H3 className="3xl">Class</H3>
             <View className="flex-row items-center justify-between gap-2">
-              <Text className="text-2xl text-foreground-dimmed">1000kg</Text>
+              <Text className="text-2xl text-foreground-dimmed">
+                {report.class}
+              </Text>
               <EditIcon className="text-foreground-dimmed/50  size-6" />
             </View>
           </View>

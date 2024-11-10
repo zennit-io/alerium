@@ -89,7 +89,20 @@ export default () => {
     },
   });
 
+  const report = useQuery(
+    api.services.report.getReportById,
+    survey?.reports[0]?._id
+      ? {
+          id: survey.reports[0]._id,
+        }
+      : "skip",
+  );
+
   if (!survey) return null;
+
+  const blurhash =
+    "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+
   return (
     <Drawer>
       <Header title={"View 3D"} subtitle={survey?.name} />
@@ -136,9 +149,11 @@ export default () => {
           <H1 className="text-primary">Survey Information</H1>
           <View className="flex-row gap-8 justify-between">
             <View className="flex-1">
-              <H3 className="3xl">Manifacture</H3>
+              <H3 className="3xl">Manufacturer</H3>
               <View className="flex-row items-center justify-between gap-2">
-                <Text className="text-2xl text-foreground-dimmed">Midea</Text>
+                <Text className="text-2xl text-foreground-dimmed">
+                  {report?.manufacturer}
+                </Text>
                 <EditIcon className="text-foreground-dimmed/50  size-6" />
               </View>
             </View>
@@ -146,7 +161,7 @@ export default () => {
               <H3 className="3xl">Scan ID</H3>
               <View className="flex-row items-center justify-between gap-2">
                 <Text className="text-2xl text-foreground-dimmed">
-                  S67665834
+                  {report?.serialNumber}
                 </Text>
                 <EditIcon className="text-foreground-dimmed/50  size-6" />
               </View>
@@ -157,7 +172,7 @@ export default () => {
               <H3 className="3xl">Model</H3>
               <View className="flex-row items-center justify-between gap-2">
                 <Text className="text-2xl text-foreground-dimmed">
-                  Split Type
+                  {report?.model}
                 </Text>
                 <EditIcon className="text-foreground-dimmed/50 size-6" />
               </View>
@@ -165,16 +180,25 @@ export default () => {
             <View className="flex-1">
               <H3 className="3xl">Weight</H3>
               <View className="flex-row items-center justify-between gap-2">
-                <Text className="text-2xl text-foreground-dimmed">80kg</Text>
-                <EditIcon className="text-foreground-dimmed/50  size-6" />
+                <Text className="text-2xl text-foreground-dimmed">
+                  {report?.weight}KG
+                </Text>
+                <EditIcon className="text-foreground-dimmed/50 size-6" />
               </View>
             </View>
           </View>
           <Image
-            source={require("@assets/images/air-conditioner-label.png")}
+            placeholder={{ blurhash }}
+            source={
+              report?.image ??
+              require("@assets/images/air-conditioner-label.png")
+            }
             className={"w-full h-52 rounded-lg"}
           />
-          <Link href={`/survey/${params.id}/expanded`} asChild>
+          <Link
+            href={`/survey/${params.id}/expanded?report=${survey?.reports[0]?._id}`}
+            asChild
+          >
             <Button color={"primary"}>
               <H3 className={"text-white text-2xl font-normal"}>More Info</H3>
             </Button>

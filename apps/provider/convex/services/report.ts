@@ -1,6 +1,5 @@
-import {v} from "convex/values";
+import {ConvexError, v} from "convex/values";
 import {mutation, query} from "../_generated/server";
-
 
 export const getAllReports = query({
   args: {},
@@ -26,10 +25,10 @@ export const getReportById = query({
     id: v.id("reports"),
   },
   handler: async (ctx, { id }) => {
-    return await ctx.db
-      .query("reports")
-      .filter((q) => q.eq(q.field("_id"), id))
-      .unique();
+    const report = await ctx.db.get(id);
+    if (!report) throw new ConvexError("Report not found");
+    const image = report.photo ? await ctx.storage.getUrl(report.photo) : null;
+    return { ...report, image };
   },
 });
 

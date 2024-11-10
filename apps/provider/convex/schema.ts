@@ -11,11 +11,14 @@ export default defineSchema({
     deviceType: v.optional(v.string()),
     description: v.optional(v.string()),
     manufacturer: v.optional(v.string()),
+    photo: v.optional(v.id("_storage")),
     model: v.optional(v.string()),
     weight: v.optional(v.float64()),
     checkedBy: v.optional(v.id("users")),
     checkedAt: v.optional(v.int64()),
     note: v.optional(v.string()),
+    dimensions: v.optional(v.string()),
+    material: v.optional(v.string()),
     location: v.optional(
       v.object({
         address: v.optional(v.string()),
@@ -24,6 +27,7 @@ export default defineSchema({
       }),
     ),
     otherMetadata: v.optional(v.any()),
+    class: v.optional(v.string()),
   }).index("by_serialNumber", ["serialNumber"]),
   surveys: defineTable({
     name: v.string(),
